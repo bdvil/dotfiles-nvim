@@ -25,6 +25,8 @@ return require('packer').startup(function(use)
     use('mbbill/undotree')
     use('tpope/vim-fugitive')
 
+    use('mrjones2014/nvim-ts-rainbow')
+
     use {
         "williamboman/mason.nvim",
         run = ":MasonUpdate" -- :MasonUpdate updates registry contents
@@ -51,11 +53,21 @@ return require('packer').startup(function(use)
         }
     }
 
-     use { 'jose-elias-alvarez/null-ls.nvim' }
-     use { 'jay-babu/mason-null-ls.nvim' }
+    use { 'onsails/lspkind.nvim' }
+
+    use { 'windwp/nvim-autopairs' }
+
+    use { 'jose-elias-alvarez/null-ls.nvim' }
+    use { 'jay-babu/mason-null-ls.nvim' }
 
     use { 'mfussenegger/nvim-dap' }
     use { 'mfussenegger/nvim-dap-python' }
+
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    }
+
 
     use { 'github/copilot.vim' }
 
