@@ -9,23 +9,23 @@ return require('packer').startup(function(use)
     }
 
     -- Packer
-    use({
+    use {
         "olimorris/onedarkpro.nvim",
         config = function()
             vim.cmd("colorscheme onedark")
         end
-    })
+    }
 
-    use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
-    use('nvim-treesitter/playground')
+    use {'nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'}}
+    use 'nvim-treesitter/playground'
 
-    use('lewis6991/impatient.nvim')
+    use 'lewis6991/impatient.nvim'
 
-    use('ThePrimeagen/harpoon')
-    use('mbbill/undotree')
-    use('tpope/vim-fugitive')
+    use 'ThePrimeagen/harpoon'
+    use 'mbbill/undotree'
+    use 'tpope/vim-fugitive'
 
-    use('mrjones2014/nvim-ts-rainbow')
+    use 'mrjones2014/nvim-ts-rainbow'
 
     use {
         "williamboman/mason.nvim",
@@ -53,15 +53,20 @@ return require('packer').startup(function(use)
         }
     }
 
-    use { 'onsails/lspkind.nvim' }
+    use 'onsails/lspkind.nvim'
 
-    use { 'windwp/nvim-autopairs' }
+    use "folke/neodev.nvim"
 
-    use { 'jose-elias-alvarez/null-ls.nvim' }
-    use { 'jay-babu/mason-null-ls.nvim' }
+    use 'windwp/nvim-autopairs'
 
-    use { 'mfussenegger/nvim-dap' }
-    use { 'mfussenegger/nvim-dap-python' }
+    use 'jose-elias-alvarez/null-ls.nvim'
+    use 'jay-babu/mason-null-ls.nvim'
+
+    use 'mfussenegger/nvim-dap'
+    use { 'mfussenegger/nvim-dap-python', requires = {"mfussenegger/nvim-dap"} }
+    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+    use "nvim-telescope/telescope-dap.nvim"
+    use "theHamsta/nvim-dap-virtual-text"
 
     use {
         'nvim-lualine/lualine.nvim',
@@ -69,9 +74,14 @@ return require('packer').startup(function(use)
     }
 
 
-    use { 'github/copilot.vim' }
+    use 'github/copilot.vim'
 
-    use { 'terrortylor/nvim-comment' }
+    use 'terrortylor/nvim-comment'
+
+    use {
+        'christoomey/vim-tmux-navigator',
+        lazy = false
+    }
 
 
 end)

@@ -1,3 +1,6 @@
+require("neodev").setup()
+
+
 local lsp = require('lsp-zero').preset("recommended")
 
 lsp.on_attach(function(_, bufnr)
@@ -28,7 +31,7 @@ cmp.setup({
   },
   mapping = {
       ['<CR>'] = cmp.mapping.confirm({select = false}),
-      ['<leader>a'] = cmp.mapping.complete(),
+      ['<C-A>'] = cmp.mapping.complete(),
       ['<Tab>'] = cmp_action.tab_complete(),
       ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
       ['<C-f>'] = cmp_action.luasnip_jump_forward(),

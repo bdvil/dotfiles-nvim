@@ -10,5 +10,6 @@ null_ls.setup({
           extra_args = { "--line-length=120", "--fast" }
       }),
       null_ls.builtins.diagnostics.flake8,
+      null_ls.builtins.formatting.isort,
   }
 })
