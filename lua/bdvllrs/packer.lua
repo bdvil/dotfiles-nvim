@@ -5,10 +5,9 @@ return require('packer').startup(function(use)
 
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.1',
-        requires = { {'nvim-lua/plenary.nvim'} }
+        requires = { { 'nvim-lua/plenary.nvim' } }
     }
 
-    -- Packer
     use {
         "olimorris/onedarkpro.nvim",
         config = function()
@@ -16,7 +15,7 @@ return require('packer').startup(function(use)
         end
     }
 
-    use {'nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'}}
+    use { 'nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' } }
     use 'nvim-treesitter/playground'
 
     use 'lewis6991/impatient.nvim'
@@ -37,19 +36,20 @@ return require('packer').startup(function(use)
         branch = 'v2.x',
         requires = {
             -- LSP Support
-            {'neovim/nvim-lspconfig'},             -- Required
-            {                                      -- Optional
+            { 'neovim/nvim-lspconfig' }, -- Required
+            {
+                -- Optional
                 'williamboman/mason.nvim',
                 run = function()
                     pcall(vim.cmd, 'MasonUpdate')
                 end,
             },
-            {'williamboman/mason-lspconfig.nvim'}, -- Optional
+            { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
             -- Autocompletion
-            {'hrsh7th/nvim-cmp'},     -- Required
-            {'hrsh7th/cmp-nvim-lsp'}, -- Required
-            {'L3MON4D3/LuaSnip'},     -- Required
+            { 'hrsh7th/nvim-cmp' },     -- Required
+            { 'hrsh7th/cmp-nvim-lsp' }, -- Required
+            { 'L3MON4D3/LuaSnip' },     -- Required
         }
     }
 
@@ -63,8 +63,8 @@ return require('packer').startup(function(use)
     use 'jay-babu/mason-null-ls.nvim'
 
     use 'mfussenegger/nvim-dap'
-    use { 'mfussenegger/nvim-dap-python', requires = {"mfussenegger/nvim-dap"} }
-    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+    use { 'mfussenegger/nvim-dap-python', requires = { "mfussenegger/nvim-dap" } }
+    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
     use "nvim-telescope/telescope-dap.nvim"
     use "theHamsta/nvim-dap-virtual-text"
 
@@ -86,12 +86,10 @@ return require('packer').startup(function(use)
     use {
         "ThePrimeagen/refactoring.nvim",
         requires = {
-            {"nvim-lua/plenary.nvim"},
-            {"nvim-treesitter/nvim-treesitter"}
+            { "nvim-lua/plenary.nvim" },
+            { "nvim-treesitter/nvim-treesitter" }
         }
     }
 
     use 'lukas-reineke/indent-blankline.nvim'
-
-
 end)
