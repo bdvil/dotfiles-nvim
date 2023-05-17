@@ -28,6 +28,7 @@ local dap_widget = require('dap.ui.widgets')
 local dap_python = require('dap-python')
 
 vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end)
+vim.keymap.set("n", "<leader>cb", function() dap.clear_breakpoints() end)
 vim.keymap.set("n", "<Leader>B", function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end)
 vim.keymap.set("n", "<Leader>lp", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end)
 vim.keymap.set("n", "<leader>c", function() dap.continue() end)
@@ -56,3 +57,18 @@ vim.keymap.set("n", "<leader>ds", function()
     local widgets = dap_widget
     widgets.centered_float(widgets.scopes)
 end)
+
+-- refactoring
+
+vim.api.nvim_set_keymap(
+    "v",
+    "<leader>rr",
+    "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
+    { noremap = true }
+)
+
+-- fugitive
+
+vim.keymap.set("n", "<leader>k", ":Git <CR>")
+vim.keymap.set("n", "<leader>gf", ":Git pull <CR>")
+vim.keymap.set("n", "<leader>gp", ":Git push <CR>")

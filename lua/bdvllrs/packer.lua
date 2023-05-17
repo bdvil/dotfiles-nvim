@@ -55,7 +55,7 @@ return require('packer').startup(function(use)
 
     use 'onsails/lspkind.nvim'
 
-    use "folke/neodev.nvim"
+    use 'folke/neodev.nvim'
 
     use 'windwp/nvim-autopairs'
 
@@ -74,7 +74,7 @@ return require('packer').startup(function(use)
     }
 
 
-    use 'github/copilot.vim'
+    -- use 'github/copilot.vim'
 
     use 'terrortylor/nvim-comment'
 
@@ -82,6 +82,16 @@ return require('packer').startup(function(use)
         'christoomey/vim-tmux-navigator',
         lazy = false
     }
+
+    use {
+        "ThePrimeagen/refactoring.nvim",
+        requires = {
+            {"nvim-lua/plenary.nvim"},
+            {"nvim-treesitter/nvim-treesitter"}
+        }
+    }
+
+    use 'lukas-reineke/indent-blankline.nvim'
 
 
 end)
