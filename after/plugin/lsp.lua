@@ -41,11 +41,26 @@ lsp.setup()
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+local lspkind = require('lspkind')
+
+lspkind.init({
+    symbol_map = {
+        Copilot = "",
+    },
+})
+
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
 
 cmp.event:on(
     'confirm_done',
     cmp_autopairs.on_confirm_done()
 )
+
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+end
 
 cmp.setup({
     sources = {
@@ -53,14 +68,65 @@ cmp.setup({
         { name = 'nvim_lsp' },
         { name = 'buffer',  keyword_length = 3 },
         { name = 'luasnip', keyword_length = 2 },
+        { name = 'copilot' },
     },
     mapping = {
-        ['<CR>'] = cmp.mapping.confirm({ select = false }),
+        ['<CR>'] =  cmp.mapping({
+            i = function(fallback)
+                if cmp.visible() and cmp.get_active_entry() then
+                    cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+                else
+                    fallback()
+                end
+            end,
+            s = cmp.mapping.confirm({ select = true }),
+            c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+        }),
         ['<C-A>'] = cmp.mapping.complete(),
-        ['<Tab>'] = cmp_action.tab_complete(),
+        ['<Tab>'] = vim.schedule_wrap(function(fallback)
+            if cmp.visible() and has_words_before() then
+                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+                fallback()
+            end
+        end),
         ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
-        ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-        ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+        ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+        ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+        ['<S-j>'] = cmp.mapping({
+            c = function()
+                if cmp.visible() then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    vim.api.nvim_feedkeys(t('<Down>'), 'n', true)
+                end
+            end,
+            i = function(fallback)
+                if cmp.visible() then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    fallback()
+                end
+            end
+        }),
+        ['<S-k>'] = cmp.mapping({
+            c = function()
+                if cmp.visible() then
+                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    vim.api.nvim_feedkeys(t('<Up>'), 'n', true)
+                end
+            end,
+            i = function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    fallback()
+                end
+            end
+        }),
+        ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), {'i', 'c'}),
+        ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i', 'c'}),
     },
     preselect = 'item',
     completion = {
@@ -77,10 +143,10 @@ cmp.setup({
                     return vim_item
                 end
             end
-            return require('lspkind').cmp_format({
+            return lspkind.cmp_format({
                 mode = "symbol_text",
                 with_text = false,
-                max_width = 50
+                max_width = 50,
             })(entry, vim_item)
         end
     }
