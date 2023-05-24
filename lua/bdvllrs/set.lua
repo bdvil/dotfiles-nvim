@@ -29,12 +29,6 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "79"
 
+vim.opt.eol = true
+
 vim.g.mapleader = " "
-
--- vim.opt.ff = "unix"
--- vim.opt.fixeol = true
-
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufWritePost" }, {
-    pattern = "*",
-    command = "setl ff=unix fixeol"
-})
