@@ -58,6 +58,8 @@ vim.keymap.set("n", "<leader>ds", function()
     widgets.centered_float(widgets.scopes)
 end)
 
+vim.keymap.set("n", "<leader>de", function() require("dapui").eval(vim.fn.input('Expression: ')) end)
+
 -- refactoring
 
 vim.api.nvim_set_keymap(
