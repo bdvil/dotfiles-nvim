@@ -5,9 +5,6 @@ local lsp = require('lsp-zero').preset("recommended")
 
 lsp.on_attach(function(_, bufnr)
     lsp.default_keymaps({ buffer = bufnr })
-    vim.keymap.set('n', '<C-l>', function()
-        vim.lsp.buf.format { async = true }
-    end, { buffer = bufnr })
 end)
 
 lsp.ensure_installed({
@@ -17,16 +14,19 @@ lsp.ensure_installed({
 local lspconfig = require 'lspconfig'
 lspconfig.pyright.setup {}
 
-lsp.format_on_save({
+local format_option = {
     format_opts = {
-        async = true,
+        async = false,
         timeout_ms = 10000,
     },
     servers = {
         ['lua_ls'] = { 'lua' },
         ['null-ls'] = { 'python' },
     }
-})
+}
+
+lsp.format_on_save(format_option)
+lsp.format_mapping('<C-l>', format_option)
 
 lsp.set_sign_icons({
     error = '✘',
@@ -140,4 +140,27 @@ cmp.setup({
             })(entry, vim_item)
         end
     }
+})
+
+
+local null_ls = require('null-ls')
+null_ls.setup({
+    debug = true,
+    sources = {
+        null_ls.builtins.diagnostics.flake8,
+        null_ls.builtins.formatting.autoflake.with({
+            extra_args = { "--remove-all-unused-imports" }
+        }),
+        null_ls.builtins.formatting.isort.with({
+            extra_args = { "--profile=black" }
+        }),
+        null_ls.builtins.formatting.black.with({
+            extra_args = { "--line-length=79" }
+        }),
+    }
+})
+
+require("mason-null-ls").setup({
+    ensure_installed = { "autoflake", "isort", "flake8", "black" },
+    automatic_installation = true,
 })

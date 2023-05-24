@@ -31,10 +31,10 @@ vim.opt.colorcolumn = "79"
 
 vim.g.mapleader = " "
 
-vim.opt.ff = "unix"
-vim.opt.fixeol = true
+-- vim.opt.ff = "unix"
+-- vim.opt.fixeol = true
 
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead", "BufWritePost" }, {
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufWritePost" }, {
     pattern = "*",
     command = "setl ff=unix fixeol"
 })
