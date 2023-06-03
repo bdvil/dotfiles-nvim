@@ -1,4 +1,4 @@
-require'nvim-treesitter.configs'.setup {
+require 'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
     ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "bash", "python", "rust", "yaml", "latex" },
 
@@ -42,7 +42,7 @@ require'nvim-treesitter.configs'.setup {
 
 -- vim.opt.foldmethod = "expr"
 -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
--- 
+--
 -- local M = {}
 -- function M.nvim_create_augroups(definitions)
 --     for group_name, definition in pairs(definitions) do
@@ -55,13 +55,13 @@ require'nvim-treesitter.configs'.setup {
 --         vim.api.nvim_command('augroup END')
 --     end
 -- end
--- 
--- 
+--
+--
 -- local autoCommands = {
 --     -- other autocommands
 --     open_folds = {
 --         {"BufReadPost,FileReadPost", "*", "normal zR"}
 --     }
 -- }
--- 
+--
 -- M.nvim_create_augroups(autoCommands)

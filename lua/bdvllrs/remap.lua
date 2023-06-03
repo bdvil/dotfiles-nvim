@@ -28,6 +28,7 @@ vim.keymap.set("t", "<A-h>", "<C-\\><C-N><C-w>h")
 
 -- DAP
 local dap = require('dap')
+local dapui = require('dapui')
 local dap_widget = require('dap.ui.widgets')
 local dap_python = require('dap-python')
 
@@ -40,7 +41,6 @@ vim.keymap.set("n", "<leader>dq", function()
     dap.terminate()
 end)
 vim.keymap.set("n", "<leader>so", function() dap.step_over() end)
-vim.keymap.set("n", "<leader>si", function() dap.step_into() end)
 vim.keymap.set("n", "<leader>si", function() dap.step_into() end)
 vim.keymap.set("n", "<leader>o", function() dap.step_out() end)
 vim.keymap.set("n", "<leader>ds", function() dap.repl.open() end)
@@ -62,7 +62,8 @@ vim.keymap.set("n", "<leader>ds", function()
     widgets.centered_float(widgets.scopes)
 end)
 
-vim.keymap.set("n", "<leader>de", function() require("dapui").eval(vim.fn.input('Expression: ')) end)
+vim.keymap.set("n", "<leader>du", function() dapui.toggle() end)
+vim.keymap.set("n", "<leader>de", function() dapui.eval(vim.fn.input('Expression: ')) end)
 
 -- refactoring
 
