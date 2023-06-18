@@ -17,10 +17,11 @@ local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
+    use 'stevearc/dressing.nvim'
 
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.1',
-        requires = { { 'nvim-lua/plenary.nvim' } }
+        requires = 'nvim-lua/plenary.nvim'
     }
 
     use {
@@ -85,8 +86,8 @@ return require('packer').startup(function(use)
     use 'jay-babu/mason-null-ls.nvim'
 
     use 'mfussenegger/nvim-dap'
-    use { 'mfussenegger/nvim-dap-python', requires = { "mfussenegger/nvim-dap" } }
-    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+    use { 'mfussenegger/nvim-dap-python', requires = "mfussenegger/nvim-dap" }
+    use { "rcarriga/nvim-dap-ui", requires = "mfussenegger/nvim-dap" }
     use "nvim-telescope/telescope-dap.nvim"
     use "theHamsta/nvim-dap-virtual-text"
 
@@ -126,8 +127,8 @@ return require('packer').startup(function(use)
     use {
         "ThePrimeagen/refactoring.nvim",
         requires = {
-            { "nvim-lua/plenary.nvim" },
-            { "nvim-treesitter/nvim-treesitter" }
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter"
         }
     }
 
@@ -136,6 +137,16 @@ return require('packer').startup(function(use)
     use 'norcalli/nvim-colorizer.lua'
 
     use 'mg979/vim-visual-multi'
+
+    use {
+        'akinsho/flutter-tools.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'stevearc/dressing.nvim', -- optional for vim.ui.select
+        },
+    }
+
+    use 'dart-lang/dart-vim-plugin'
 
     if packer_bootstrap then
         require('packer').sync()
