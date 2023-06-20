@@ -12,7 +12,7 @@ require("nvim-dap-virtual-text").setup({})
 
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
-    dapui.open()
+    dapui.open({ reset = true })
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
     dapui.close()
@@ -35,8 +35,8 @@ dapui.setup({
         },
         {
             elements = {
-                { id = "repl",   size = 0.33 },
-                { id = "scopes", size = 0.66 },
+                { id = "repl",   size = 0.5 },
+                { id = "scopes", size = 0.5 },
             },
             size = 15,
             position = "bottom",
@@ -49,13 +49,13 @@ vim.api.nvim_set_hl(0, 'DapLogPoint', { ctermbg = 0, fg = '#61afef' })
 vim.api.nvim_set_hl(0, 'DapStopped', { ctermbg = 0, fg = '#98c379' })
 
 vim.fn.sign_define('DapBreakpoint', {
-    text = '',
+    text = '',
     texthl = 'DapBreakpoint',
     linehl = 'DapBreakpoint',
     numhl = 'DapBreakpoint',
 })
 vim.fn.sign_define('DapBreakpointCondition', {
-    text = 'ﳁ',
+    text = '',
     texthl = 'DapBreakpoint',
     linehl = 'DapBreakpoint',
     numhl = 'DapBreakpoint',
