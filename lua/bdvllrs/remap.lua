@@ -28,9 +28,9 @@ vim.keymap.set("n", "<C-w>u", ":source ~/.session.nvim<CR>")
 -- Telescope
 local builtin = require('telescope.builtin')
 
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<C-p>', builtin.git_files, {})
 vim.keymap.set('n', '<C-e>', builtin.oldfiles, {})
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>sh', builtin.search_history, {})
 vim.keymap.set('n', '<leader>fd', builtin.lsp_definitions, {})
@@ -102,3 +102,45 @@ vim.api.nvim_set_keymap(
 vim.keymap.set("n", "<leader>k", ":Git <CR>")
 vim.keymap.set("n", "<leader>gf", ":Git pull <CR>")
 vim.keymap.set("n", "<leader>gp", ":Git push <CR>")
+
+-- flash
+local flash = require('flash')
+
+vim.keymap.set({ "n", "x", "o" }, "<leader>s", function()
+    flash.jump({
+        search = {
+            mode = function(str)
+                return "\\<" .. str
+            end,
+        },
+    })
+end)
+vim.keymap.set({ "n", "x", "o" }, "<leader>S", function() flash.treesitter() end)
+vim.keymap.set("o", "<leader>r", function() flash.remote() end)
+vim.keymap.set({ "n", "x", "o" }, "<leader>R", function() flash.treesitter_search() end)
+
+-- Trouble
+local trouble = require("trouble")
+
+vim.keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>",
+    { silent = true, noremap = true }
+)
+vim.keymap.set("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>",
+    { silent = true, noremap = true }
+)
+vim.keymap.set("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>",
+    { silent = true, noremap = true }
+)
+vim.keymap.set("n", "<leader>xl", "<cmd>TroubleToggle loclist<cr>",
+    { silent = true, noremap = true }
+)
+vim.keymap.set("n", "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",
+    { silent = true, noremap = true }
+)
+vim.keymap.set("n", "gR", "<cmd>TroubleToggle lsp_references<cr>",
+    { silent = true, noremap = true }
+)
+vim.keymap.set("n", "<leader>tn", trouble.next, { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>tp", trouble.previous, { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>tf", trouble.first, { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>tl", trouble.last, { silent = true, noremap = true })

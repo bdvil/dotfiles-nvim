@@ -39,6 +39,14 @@ return require('packer').startup(function(use)
     use 'nvim-treesitter/playground'
 
     use 'lewis6991/impatient.nvim'
+    use {
+        'folke/trouble.nvim',
+        config = function()
+            require("trouble").setup({
+                icons = false,
+            })
+        end
+    }
 
     use 'ThePrimeagen/harpoon'
     use 'mbbill/undotree'
@@ -46,6 +54,7 @@ return require('packer').startup(function(use)
     use 'tpope/vim-repeat'
     use 'tpope/vim-surround'
     use 'tpope/vim-unimpaired'
+    use 'folke/flash.nvim'
 
     use 'mrjones2014/nvim-ts-rainbow'
 
@@ -75,6 +84,7 @@ return require('packer').startup(function(use)
             { 'L3MON4D3/LuaSnip' },     -- Required
         }
     }
+    use 'microsoft/python-type-stubs'
 
     use 'onsails/lspkind.nvim'
 

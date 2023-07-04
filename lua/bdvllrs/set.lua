@@ -32,3 +32,4 @@ vim.opt.colorcolumn = "88"
 vim.opt.eol = true
 
 vim.g.mapleader = " "
+vim.g.python3_host_prog = os.getenv("NVIM_PYTHON_HOST")
