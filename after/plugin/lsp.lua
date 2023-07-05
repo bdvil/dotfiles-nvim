@@ -45,6 +45,7 @@ lsp.setup()
 
 
 local cmp = require('cmp')
+local compare = require('cmp.config.compare')
 local cmp_action = require('lsp-zero').cmp_action()
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 local lspkind = require('lspkind')
@@ -145,6 +146,21 @@ cmp.setup({
                 max_width = 50,
             })(entry, vim_item)
         end
+    },
+    sorting = {
+        priority_weight = 1.0,
+        comparators = {
+            compare.locality,
+            compare.recently_used,
+            compare.score,
+            compare.offset,
+            compare.order,
+            -- compare.scopes,
+            -- compare.sort_text,
+            -- compare.exact,
+            -- compare.kind,
+            -- compare.length,
+        }
     }
 })
 
