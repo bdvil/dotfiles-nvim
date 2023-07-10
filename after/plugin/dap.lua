@@ -3,7 +3,7 @@ local dap = require("dap")
 local dapui = require('dapui')
 local dap_python = require('dap-python')
 dapui.setup()
-dap_python.setup(os.getenv("DAP_ENV"))
+dap_python.setup(os.getenv("DEBUGPY_ENV"))
 dap_python.test_runner = "pytest"
 
 require('dap.ext.vscode').load_launchjs()
