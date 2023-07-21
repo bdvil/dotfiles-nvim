@@ -1,5 +1,3 @@
-vim.g.mapleader = " "
-
 vim.keymap.set({ "n", "x", "v" }, "(", "[", { remap = true })
 vim.keymap.set({ "n", "x", "v" }, ")", "]", { remap = true })
 
