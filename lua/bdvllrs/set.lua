@@ -33,3 +33,4 @@ vim.opt.eol = true
 
 vim.g.mapleader = " "
 vim.g.python3_host_prog = os.getenv("NVIM_PYTHON_HOST")
+vim.g.node_host_prog = os.getenv("NVIM_NODE_HOST")

@@ -144,3 +144,7 @@ vim.keymap.set("n", "<leader>tn", trouble.next, { silent = true, noremap = true 
 vim.keymap.set("n", "<leader>tp", trouble.previous, { silent = true, noremap = true })
 vim.keymap.set("n", "<leader>tf", trouble.first, { silent = true, noremap = true })
 vim.keymap.set("n", "<leader>tl", trouble.last, { silent = true, noremap = true })
+
+-- pyro
+local move_symbol = require("bdvllrs.pyro")
+vim.keymap.set("n", "<leader>m", move_symbol, { silent = true, noremap = true })

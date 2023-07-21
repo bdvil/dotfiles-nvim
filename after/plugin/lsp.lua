@@ -169,6 +169,67 @@ local null_ls = require('null-ls')
 -- local null_ls_helpers = require('null-ls.helpers')
 
 local builtin = require("telescope.builtin")
+local builtin = require("telescope.builtin")
+local actions = require "telescope.actions"
+local action_state = require "telescope.actions.state"
+
+
+local find_and_return_file = function(callback)
+    builtin.find_files({
+        attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local selected = action_state.get_selected_entry()
+                callback(selected[1])
+            end)
+            return true
+        end
+        ,
+    })
+end
+
+local path_to_module = function(path)
+    path = path:gsub(".py", ""):gsub("/", ".")
+    return path
+end
+
+local pyro_source = {
+    name = "pyro",
+    filetypes = { "python" },
+    method = null_ls.methods.CODE_ACTION,
+    generator = {
+        fn = function(params)
+            local project_root = vim.fn.getcwd()
+            if project_root:sub(-1) ~= "/" then
+                project_root = project_root .. "/"
+            end
+            local current_module = params.bufname:gsub(project_root, "")
+            current_module = path_to_module(current_module)
+
+            local cmd = string.format(
+                "pyro move %s %s %d %d",
+                project_root,
+                current_module,
+                params.row,
+                params.col + 1
+            )
+            return {
+                {
+                    title = "Move Symbol",
+                    action = function()
+                        find_and_return_file(
+                            function(target_module)
+                                target_module = target_module:gsub(project_root, "")
+                                target_module = path_to_module(target_module)
+                                print(string.format("%s %s", cmd, target_module))
+                            end
+                        )
+                    end,
+                }
+            }
+        end,
+    },
+}
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 
