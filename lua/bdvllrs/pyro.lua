@@ -22,6 +22,11 @@ local path_to_module = function(path)
     return path
 end
 
+local function execute_command(command)
+    local output = vim.fn.system(command)
+    return vim.json.decode(output)
+end
+
 local move_symbol = function()
     local project_root = vim.fn.getcwd()
     if project_root:sub(-1) ~= "/" then
@@ -46,7 +51,12 @@ local move_symbol = function()
             target_module = target_module:gsub(project_root, "")
             target_module = path_to_module(target_module)
             local command = string.format("%s %s", cmd, target_module)
-            vim.cmd(string.format("silent w !%s", command))
+            vim.cmd("write")
+            local output = execute_command(command)
+            vim.cmd("edit!")
+            if output ~= nil and output["success"] ~= nil and not output["success"] then
+                print(output["errorMsg"])
+            end
         end
     )
 end
