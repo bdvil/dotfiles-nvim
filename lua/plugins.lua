@@ -23,6 +23,7 @@ return {
     "nvim-treesitter/playground",
 
     "lewis6991/impatient.nvim",
+
     {
         'folke/trouble.nvim',
         config = function()
