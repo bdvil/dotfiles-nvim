@@ -24,10 +24,16 @@ end
 
 local function execute_command(command)
     local output = vim.fn.system(command)
-    return vim.json.decode(output)
+    return vim.json.decode(output, {})
 end
 
-local move_symbol = function()
+local move_symbol = function(opt)
+    local default_opts = {
+        pyro_bin = "pyro",
+    }
+
+    opt = opt or default_opts
+
     local project_root = vim.fn.getcwd()
     if project_root:sub(-1) ~= "/" then
         project_root = project_root .. "/"
@@ -39,11 +45,12 @@ local move_symbol = function()
     local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
 
     local cmd = string.format(
-        "pyro move %s %s %d %d",
+        "%s move %s %s %d %d",
+        opt.pyro_bin,
         project_root,
         current_module,
         cursor_row,
-        cursor_col + 1
+        cursor_col
     )
 
     find_and_return_file(
@@ -53,6 +60,9 @@ local move_symbol = function()
             local command = string.format("%s %s", cmd, target_module)
             vim.cmd("write")
             local output = execute_command(command)
+            if output ~= nil then
+                print(vim.inspect(output["success"]))
+            end
             vim.cmd("edit!")
             if output ~= nil and output["success"] ~= nil and not output["success"] then
                 print(output["errorMsg"])
