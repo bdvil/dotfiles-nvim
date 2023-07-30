@@ -2,23 +2,61 @@ require("neodev").setup()
 
 
 local lsp = require('lsp-zero').preset("recommended")
+local mason_lspconfig = require('mason-lspconfig')
 
 lsp.on_attach(function(_, bufnr)
     lsp.default_keymaps({ buffer = bufnr })
 end)
 
-lsp.ensure_installed({
-    'pyright',
-    'lua_ls',
+mason_lspconfig.setup({
+    ensure_installed = {
+        'pyright',
+        'pylsp',
+        'lua_ls',
+    },
 })
+
 
 local lspconfig = require 'lspconfig'
 lspconfig.pyright.setup {
     settings = {
         pyright = {
-            stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs/python-type-stubs"
+            analysis = {
+                stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs/python-type-stubs"
+            }
         }
     }
+}
+lspconfig.pylsp.setup {
+    settings = {
+        pylsp = {
+            plugins = {
+                -- defaults
+                flake8 = { enabled = true },
+                jedi_completion = { enabled = false },
+                jedi_definition = { enabled = false },
+                jedi_hover = { enabled = false },
+                jedi_references = { enabled = false },
+                jedi_symbols = { enabled = false },
+                mccade = { enabled = false },
+                preload = { enabled = false },
+                pycodestyle = { enabled = false },
+                rope_autoimport = { enabled = false },
+                -- added with :PylspInstall
+                isort = {
+                    enabled = true,
+                    profile = "black"
+                },
+                black = {
+                    enabled = true,
+                    line_length = 79
+                },
+            },
+            rope = {
+                ropeFolder = vim.fn.getcwd() .. ".ropeproject",
+            },
+        }
+    },
 }
 lspconfig.lua_ls.setup {
     settings = {
@@ -47,7 +85,7 @@ local format_option = {
     },
     servers = {
         ['lua_ls'] = { 'lua' },
-        ['null-ls'] = { 'python' },
+        ['pylsp'] = { 'python' },
     }
 }
 
@@ -182,28 +220,4 @@ cmp.setup({
             -- compare.length,
         }
     }
-})
-
-
-local null_ls = require('null-ls')
-
-null_ls.setup({
-    debug = true,
-    sources = {
-        null_ls.builtins.diagnostics.flake8,
-        null_ls.builtins.formatting.autoflake.with({
-            extra_args = { "--remove-all-unused-imports" }
-        }),
-        null_ls.builtins.formatting.isort.with({
-            extra_args = { "--profile=black" }
-        }),
-        null_ls.builtins.formatting.black.with({
-            extra_args = { "--line-length=79" }
-        }),
-    }
-})
-
-require("mason-null-ls").setup({
-    ensure_installed = { "autoflake", "isort", "flake8", "black" },
-    automatic_installation = true,
 })
