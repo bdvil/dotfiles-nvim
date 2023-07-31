@@ -24,7 +24,29 @@ end
 
 local function execute_command(command)
     local output = vim.fn.system(command)
-    return vim.json.decode(output, {})
+    return vim.json.decode(output or "{}", {})
+end
+
+local function set_quickfix(modified_files)
+    local quickfix_list = {}
+    for _, file_info in ipairs(modified_files) do
+        local filename = file_info.filename
+        table.insert(quickfix_list, { filename = filename, lnum = 1 })
+    end
+    vim.fn.setqflist({}, 'r', { title = 'Modified Files', items = quickfix_list })
+end
+
+local function update_files(edited_files)
+    local current_win = vim.fn.win_getid()
+    for _, file_info in ipairs(edited_files) do
+        local bufnr = vim.fn.bufnr(file_info.filename)
+        if bufnr ~= nil and bufnr > 0 then
+            local win = vim.fn.bufwinid(bufnr)
+            vim.fn.win_gotoid(win)
+            vim.cmd('edit ' .. file_info.filename)
+        end
+    end
+    vim.fn.win_gotoid(current_win)
 end
 
 local move_symbol = function(opt)
@@ -34,7 +56,7 @@ local move_symbol = function(opt)
 
     opt = opt or default_opts
 
-    local project_root = vim.fn.getcwd()
+    local project_root = vim.fn.getcwd() or "./"
     if project_root:sub(-1) ~= "/" then
         project_root = project_root .. "/"
     end
@@ -60,10 +82,10 @@ local move_symbol = function(opt)
             local command = string.format("%s %s", cmd, target_module)
             vim.cmd("write")
             local output = execute_command(command)
-            if output ~= nil then
-                print(vim.inspect(output["success"]))
+            if output ~= nil and output["success"] ~= nil and output["success"] then
+                set_quickfix(output["editedFiles"] or {})
+                update_files(output["editedFiles"] or {})
             end
-            vim.cmd("edit!")
             if output ~= nil and output["success"] ~= nil and not output["success"] then
                 print(output["errorMsg"])
             end
