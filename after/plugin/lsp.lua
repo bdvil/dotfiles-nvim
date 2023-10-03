@@ -33,6 +33,7 @@ lspconfig.pylsp.setup {
             plugins = {
                 -- defaults
                 flake8 = { enabled = true },
+                pyflakes = { enabled = false },
                 jedi_completion = { enabled = false },
                 jedi_definition = { enabled = false },
                 jedi_hover = { enabled = false },
@@ -220,4 +221,14 @@ cmp.setup({
             -- compare.length,
         }
     }
+})
+
+
+vim.diagnostic.config({
+    virtual_text = {
+        source = true,
+    },
+    float = {
+        source = true,
+    },
 })
