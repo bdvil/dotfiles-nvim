@@ -33,6 +33,8 @@ lspconfig.pylsp.setup {
             plugins = {
                 -- defaults
                 flake8 = { enabled = true },
+                autopep8 = { enabled = false },
+                yapf = { enabled = false },
                 pyflakes = { enabled = false },
                 jedi_completion = { enabled = false },
                 jedi_definition = { enabled = false },
