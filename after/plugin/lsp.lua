@@ -46,6 +46,7 @@ lspconfig.pylsp.setup {
                 pycodestyle = { enabled = false },
                 rope_autoimport = { enabled = false },
                 -- added with :PylspInstall
+                autoflake = { enabled = true },
                 isort = {
                     enabled = true,
                     profile = "black"
@@ -136,7 +137,7 @@ cmp.setup({
         { name = 'nvim_lsp' },
         { name = 'buffer',  keyword_length = 3 },
         { name = 'luasnip', keyword_length = 2 },
-        { name = 'copilot' },
+        -- { name = 'copilot' },
     },
     mapping = {
         ['<CR>'] = cmp.mapping.confirm(),
