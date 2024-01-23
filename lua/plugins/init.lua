@@ -49,12 +49,7 @@ return {
 
     "folke/neodev.nvim",
 
-    {
-        "windwp/nvim-autopairs",
-        config = function()
-            require('nvim-autopairs').setup({})
-        end
-    },
+    "windwp/nvim-autopairs",
 
     "mfussenegger/nvim-dap",
     { 'mfussenegger/nvim-dap-python', dependencies = "mfussenegger/nvim-dap" },
