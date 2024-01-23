@@ -1,28 +1,14 @@
 return {
-    "stevearc/dressing.nvim",
-
-    {
-        'nvim-telescope/telescope.nvim',
-        version = '0.1.1',
-        dependencies = 'nvim-lua/plenary.nvim'
-    },
-
+    -- "stevearc/dressing.nvim",
     {
         "olimorris/onedarkpro.nvim",
         priority = 1000,
         config = function()
-            vim.cmd("colorscheme onedark")
+            vim.cmd.colorscheme("onedark")
         end
     },
 
-    {
-        'nvim-treesitter/nvim-treesitter',
-        build = ':TSUpdate'
-    },
-
     "nvim-treesitter/playground",
-
-    "lewis6991/impatient.nvim",
 
     {
         'folke/trouble.nvim',
@@ -33,7 +19,6 @@ return {
         end
     },
 
-    "ThePrimeagen/harpoon",
     "mbbill/undotree",
     "tpope/vim-fugitive",
     "tpope/vim-repeat",
@@ -64,7 +49,12 @@ return {
 
     "folke/neodev.nvim",
 
-    "windwp/nvim-autopairs",
+    {
+        "windwp/nvim-autopairs",
+        config = function()
+            require('nvim-autopairs').setup({})
+        end
+    },
 
     "mfussenegger/nvim-dap",
     { 'mfussenegger/nvim-dap-python', dependencies = "mfussenegger/nvim-dap" },
@@ -115,8 +105,6 @@ return {
     "lukas-reineke/indent-blankline.nvim",
 
     "norcalli/nvim-colorizer.lua",
-
-    "mg979/vim-visual-multi",
 
     {
         'akinsho/flutter-tools.nvim',
