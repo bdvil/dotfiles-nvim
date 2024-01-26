@@ -6,6 +6,8 @@ local mason_lspconfig = require('mason-lspconfig')
 
 lsp.on_attach(function(_, bufnr)
     lsp.default_keymaps({ buffer = bufnr })
+
+    vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help)
 end)
 
 mason_lspconfig.setup({
