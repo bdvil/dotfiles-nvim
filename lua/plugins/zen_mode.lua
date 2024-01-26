@@ -7,6 +7,7 @@ return {
             options = {
                 wrap = true,
                 linebreak = true,
+                cursorcolumn = false,
             }
         }
     },
