@@ -2,12 +2,12 @@ return {
     "folke/zen-mode.nvim",
     opts = {
         window = {
-            width = 100,
+            width = 120,
 
             options = {
                 wrap = true,
                 linebreak = true,
-                cursorcolumn = false,
+                colorcolumn = "",
             }
         }
     },
