@@ -1,26 +1,12 @@
 return {
     -- "stevearc/dressing.nvim",
-    {
-        "olimorris/onedarkpro.nvim",
-        priority = 1000,
-        config = function()
-            vim.cmd.colorscheme("onedark")
-        end
-    },
-
     "nvim-treesitter/playground",
-
     {
-        'folke/trouble.nvim',
+        "mbbill/undotree",
         config = function()
-            require("trouble").setup({
-                icons = false,
-            })
+            vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
         end
     },
-
-    "mbbill/undotree",
-    "tpope/vim-fugitive",
     "tpope/vim-repeat",
     "tpope/vim-surround",
     "tpope/vim-unimpaired",
@@ -28,59 +14,7 @@ return {
 
     "mrjones2014/nvim-ts-rainbow",
 
-    {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v2.x',
-        dependencies = {
-            { 'neovim/nvim-lspconfig' },
-            {
-                'williamboman/mason.nvim',
-                build = ':MasonUpdate',
-            },
-            { 'williamboman/mason-lspconfig.nvim' },
-            { 'hrsh7th/nvim-cmp' },
-            { 'hrsh7th/cmp-nvim-lsp' },
-            { 'L3MON4D3/LuaSnip' },
-        }
-    },
-    "microsoft/python-type-stubs",
-
-    "onsails/lspkind.nvim",
-
-    "folke/neodev.nvim",
-
     "windwp/nvim-autopairs",
-
-    "mfussenegger/nvim-dap",
-    { 'mfussenegger/nvim-dap-python', dependencies = "mfussenegger/nvim-dap" },
-    { "rcarriga/nvim-dap-ui",         dependencies = "mfussenegger/nvim-dap" },
-    "nvim-telescope/telescope-dap.nvim",
-    "theHamsta/nvim-dap-virtual-text",
-
-    {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true }
-    },
-
-
-    -- "github/copilot.vim",
-    -- {
-    --     "zbirenbaum/copilot-cmp",
-    --     config = function()
-    --         require("copilot_cmp").setup()
-    --     end,
-    --     dependencies = {
-    --         "zbirenbaum/copilot.lua",
-    --         cmd = "Copilot",
-    --         event = "InsertEnter",
-    --         config = function()
-    --             require("copilot").setup({
-    --                 suggestion = { enabled = false },
-    --                 panel = { enabled = false },
-    --             })
-    --         end,
-    --     }
-    -- },
 
     "terrortylor/nvim-comment",
 
