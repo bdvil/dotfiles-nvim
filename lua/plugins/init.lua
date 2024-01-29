@@ -15,8 +15,14 @@ return {
     "mrjones2014/nvim-ts-rainbow",
 
     "windwp/nvim-autopairs",
-
-    "terrortylor/nvim-comment",
+    {
+        "numToStr/Comment.nvim",
+        lazy = false,
+        config = function()
+            print("ok")
+            require('Comment').setup()
+        end
+    },
 
     {
         'christoomey/vim-tmux-navigator',
