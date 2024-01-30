@@ -32,6 +32,7 @@ return {
                     "pyright",
                     "pylsp",
                     "lua_ls",
+                    "texlab"
                 },
             })
 
@@ -97,6 +98,23 @@ return {
                         telemetry = {
                             enable = false,
                         },
+                    }
+                }
+            })
+
+            lspconfig.texlab.setup({
+                settings = {
+                    texlab = {
+                        build = {
+                            executable = "latexmk",
+                            -- forwardSearchAfter = true,
+                            onSave = true
+                        },
+                        chktex = {
+                            onOpenAndSave = true
+                        },
+                        bibtexFormatter = "latexindent",
+                        latexFormatter = "latexindent",
                     }
                 }
             })
