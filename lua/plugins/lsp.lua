@@ -105,16 +105,25 @@ return {
             lspconfig.texlab.setup({
                 settings = {
                     texlab = {
+                        rootDirectory = nil,
                         build = {
                             executable = "latexmk",
+                            -- args = { "-pdf", "-interaction=nonstopmode", "%f" },
                             -- forwardSearchAfter = true,
                             onSave = true
                         },
+                        -- forwardSearch = {
+                        --     executable = "okular",
+                        --     args = { "--unique", "file:%p#src:%l%f" }
+                        -- },
                         chktex = {
                             onOpenAndSave = true
                         },
                         bibtexFormatter = "latexindent",
                         latexFormatter = "latexindent",
+                        latexindent = {
+                            modifyLineBreaks = true,
+                        },
                     }
                 }
             })
