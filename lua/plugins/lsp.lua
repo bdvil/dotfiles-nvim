@@ -7,17 +7,20 @@ return {
         "VonHeikemen/lsp-zero.nvim",
         branch = "v2.x",
         dependencies = {
-            { "neovim/nvim-lspconfig" },
+            "neovim/nvim-lspconfig",
             {
                 "williamboman/mason.nvim",
                 build = ":MasonUpdate",
             },
-            { "williamboman/mason-lspconfig.nvim" },
-            { "hrsh7th/nvim-cmp" },
-            { "hrsh7th/cmp-nvim-lsp" },
-            { "L3MON4D3/LuaSnip" },
+            "williamboman/mason-lspconfig.nvim",
+            "hrsh7th/nvim-cmp",
+            "hrsh7th/cmp-nvim-lsp",
+            "L3MON4D3/LuaSnip",
+            "j-hui/fidget.nvim",
         },
         config = function()
+            require("fidget").setup({})
+
             local lsp = require("lsp-zero").preset("recommended")
             local mason_lspconfig = require("mason-lspconfig")
 
