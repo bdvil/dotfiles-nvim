@@ -55,7 +55,9 @@ return {
                     pylsp = {
                         plugins = {
                             -- defaults
-                            flake8 = { enabled = true },
+                            flake8 = {
+                                enabled = true,
+                            },
                             autopep8 = { enabled = false },
                             yapf = { enabled = false },
                             pyflakes = { enabled = false },
@@ -76,7 +78,7 @@ return {
                             },
                             black = {
                                 enabled = true,
-                                line_length = 79
+                                line_length = 88
                             },
                         },
                         rope = {
