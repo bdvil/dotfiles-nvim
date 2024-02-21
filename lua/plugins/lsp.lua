@@ -15,7 +15,11 @@ return {
             "williamboman/mason-lspconfig.nvim",
             "hrsh7th/nvim-cmp",
             "hrsh7th/cmp-nvim-lsp",
-            "L3MON4D3/LuaSnip",
+            {
+                "L3MON4D3/LuaSnip",
+                lazy = false,
+                dependencies = { "saadparwaiz1/cmp_luasnip" },
+            },
             "j-hui/fidget.nvim",
         },
         config = function()
@@ -156,6 +160,16 @@ return {
 
             lsp.setup()
 
+            local ls = require("luasnip")
+
+            vim.keymap.set({ "i", "s" }, "<C-k>", function() ls.expand() end, { silent = true })
+            vim.keymap.set({ "i", "s" }, "<C-l>", function() ls.jump(1) end, { silent = true })
+            vim.keymap.set({ "i", "s" }, "<C-h>", function() ls.jump(-1) end, { silent = true })
+            vim.keymap.set({ "i", "s" }, "<C-j>", function()
+                if ls.choice_active() then
+                    ls.change_choice(1)
+                end
+            end, { silent = true })
 
             local cmp = require("cmp")
             local compare = require("cmp.config.compare")
@@ -184,10 +198,11 @@ return {
 
             cmp.setup({
                 sources = {
-                    { name = "path" },
+                    { name = "luasnip" },
                     { name = "nvim_lsp" },
-                    { name = "buffer",  keyword_length = 3 },
-                    { name = "luasnip", keyword_length = 2 },
+                    { name = "nvim_lsp_signature_help" },
+                    { name = "path" },
+                    { name = "buffer",                 keyword_length = 3 },
                     -- { name = "copilot" },
                 },
                 mapping = {
@@ -277,7 +292,12 @@ return {
                         -- compare.kind,
                         -- compare.length,
                     }
-                }
+                },
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end
+                },
             })
 
 
