@@ -11,7 +11,9 @@ return {
         local dapui = require('dapui')
         local dap_python = require('dap-python')
 
-        dapui.setup()
+        dapui.setup({
+            console = "integratedTerminal"
+        })
         dap_python.setup(os.getenv("DEBUGPY_ENV"))
         dap_python.test_runner = "pytest"
 
@@ -28,28 +30,6 @@ return {
         dap.listeners.before.event_exited["dapui_config"] = function()
             dapui.close()
         end
-
-        dapui.setup({
-            layouts = {
-                {
-                    elements = {
-                        { id = "breakpoints", size = 0.33 },
-                        { id = "stacks",      size = 0.33 },
-                        { id = "watches",     size = 0.33 },
-                    },
-                    size = 40,
-                    position = "left",
-                },
-                {
-                    elements = {
-                        { id = "repl",   size = 0.5 },
-                        { id = "scopes", size = 0.5 },
-                    },
-                    size = 15,
-                    position = "bottom",
-                },
-            },
-        })
 
         vim.api.nvim_set_hl(0, 'DapBreakpoint', { ctermbg = 0, fg = '#BB3939' })
         vim.api.nvim_set_hl(0, 'DapLogPoint', { ctermbg = 0, fg = '#61afef' })
