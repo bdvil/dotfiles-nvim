@@ -87,8 +87,6 @@ return {
         vim.keymap.set("n", "<leader>so", function() dap.step_over() end)
         vim.keymap.set("n", "<leader>si", function() dap.step_into() end)
         vim.keymap.set("n", "<leader>o", function() dap.step_out() end)
-        vim.keymap.set("n", "<leader>ds", function() dap.repl.open() end)
-        vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end)
         vim.keymap.set("n", "<leader>dl", function() dap.run_last() end)
         vim.keymap.set("n", "<leader>dt", function() dap_python.test_method() end)
         vim.keymap.set({ "n", "v" }, "<leader>dh", function()
@@ -97,13 +95,11 @@ return {
         vim.keymap.set({ "n", "v" }, "<leader>dp", function()
             dap_widget.preview()
         end)
-        vim.keymap.set("n", "<leader>df", function()
-            local widgets = dap_widget
-            widgets.centered_float(widgets.frames)
-        end)
         vim.keymap.set("n", "<leader>ds", function()
-            local widgets = dap_widget
-            widgets.centered_float(widgets.scopes)
+            dapui.float_element("scopes")
+        end)
+        vim.keymap.set("n", "<leader>dc", function()
+            dapui.float_element("console")
         end)
 
         vim.keymap.set("n", "<leader>du", function()
