@@ -96,10 +96,16 @@ return {
             dap_widget.preview()
         end)
         vim.keymap.set("n", "<leader>ds", function()
-            dapui.float_element("scopes")
+            dapui.float_element("scopes", {
+                position = "center",
+                enter = true,
+            })
         end)
         vim.keymap.set("n", "<leader>dc", function()
-            dapui.float_element("console")
+            dapui.float_element("console", {
+                position = "center",
+                enter = true,
+            })
         end)
 
         vim.keymap.set("n", "<leader>du", function()

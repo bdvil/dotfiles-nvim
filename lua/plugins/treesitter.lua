@@ -13,6 +13,7 @@ return {
                     "python",
                     "yaml",
                     "latex",
+                    "markdown",
                 },
 
                 sync_install = false,

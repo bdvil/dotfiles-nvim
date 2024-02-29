@@ -19,7 +19,6 @@ return {
         "numToStr/Comment.nvim",
         lazy = false,
         config = function()
-            print("ok")
             require('Comment').setup()
         end
     },
@@ -50,4 +49,26 @@ return {
     },
 
     "dart-lang/dart-vim-plugin",
+
+    {
+        "AckslD/nvim-FeMaco.lua",
+        config = function()
+            require("femaco").setup({
+                float_opts = function(_)
+                    return {
+                        relative = 'editor',
+                        width = vim.api.nvim_win_get_width(0),
+                        height = vim.api.nvim_win_get_height(0),
+                        anchor = 'NW',
+                        zindex = 1,
+                        row = 0,
+                        col = 0,
+                    }
+                end,
+            })
+
+            local femaco_edit = require("femaco.edit")
+            vim.keymap.set("n", "<leader>e", femaco_edit.edit_code_block)
+        end
+    },
 }
