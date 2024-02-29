@@ -65,6 +65,9 @@ return {
                         col = 0,
                     }
                 end,
+                ensure_newline = function(_)
+                    return true
+                end,
             })
 
             local femaco_edit = require("femaco.edit")
