@@ -39,7 +39,8 @@ return {
                     "pyright",
                     "pylsp",
                     "lua_ls",
-                    "texlab"
+                    "texlab",
+                    "sqlls",
                 },
             })
 
@@ -136,6 +137,8 @@ return {
                     }
                 }
             })
+
+            lspconfig.sqlls.setup({})
 
             local format_option = {
                 format_opts = {

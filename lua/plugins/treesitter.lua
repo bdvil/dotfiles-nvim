@@ -14,6 +14,7 @@ return {
                     "yaml",
                     "latex",
                     "markdown",
+                    "sql",
                 },
 
                 sync_install = false,
