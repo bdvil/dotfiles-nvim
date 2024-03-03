@@ -40,9 +40,6 @@ return {
             vim.keymap.set('n', '<leader>sq', builtin.quickfix, {})
             vim.keymap.set('n', '<leader>sh', builtin.help_tags, {})
             vim.keymap.set('n', '<leader><leader>', builtin.buffers, {})
-
-            vim.keymap.set('n', '<leader>ds', builtin.lsp_document_symbols, {})
-            vim.keymap.set('n', '<leader>fd', builtin.lsp_definitions, {})
         end
     }
 }
