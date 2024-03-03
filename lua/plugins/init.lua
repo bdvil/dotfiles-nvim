@@ -7,6 +7,18 @@ return {
             vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
         end
     },
+    {
+        "lewis6991/gitsigns.nvim",
+        opts = {
+            signs = {
+                add = { text = "+" },
+                change = { text = "~" },
+                delete = { text = "_" },
+                topdelete = { text = "‾" },
+                changedelete = { text = "~" },
+            },
+        },
+    },
     "tpope/vim-repeat",
     "tpope/vim-surround",
     "tpope/vim-unimpaired",
@@ -26,14 +38,6 @@ return {
     {
         'christoomey/vim-tmux-navigator',
         lazy = false
-    },
-
-    {
-        "ThePrimeagen/refactoring.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter"
-        }
     },
 
     "lukas-reineke/indent-blankline.nvim",

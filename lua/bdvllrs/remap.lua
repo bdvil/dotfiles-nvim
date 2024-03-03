@@ -25,13 +25,6 @@ vim.keymap.set("n", "<C-w>u", ":source ~/.session.nvim<CR>")
 vim.keymap.set("t", "<ESC>", "<C-\\><C-N>")
 vim.keymap.set("t", "<A-h>", "<C-\\><C-N><C-w>h")
 
--- refactoring
-vim.api.nvim_set_keymap(
-    "v",
-    "<leader>rr",
-    "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
-    { noremap = true }
-)
 
 -- flash
 local flash = require('flash')
