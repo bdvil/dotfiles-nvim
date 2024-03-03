@@ -7,6 +7,10 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opt = {} },
+			{
+				"creativenull/efmls-configs-nvim",
+				version = "v1.x.x", -- version is optional, but recommended
+			},
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -67,43 +71,21 @@ return {
 						},
 					},
 				},
-				pylsp = {
+				efm = {
+					init_options = {
+						documentFormatting = true,
+						documentRangeFormatting = true,
+					},
 					settings = {
-						pylsp = {
-							plugins = {
-								-- defaults
-								flake8 = {
-									enabled = true,
-								},
-								autopep8 = { enabled = false },
-								yapf = { enabled = false },
-								pyflakes = { enabled = false },
-								jedi_completion = { enabled = false },
-								jedi_definition = { enabled = false },
-								jedi_hover = { enabled = false },
-								jedi_references = { enabled = false },
-								jedi_symbols = { enabled = false },
-								mccade = { enabled = false },
-								preload = { enabled = false },
-								pycodestyle = { enabled = false },
-								rope_autoimport = { enabled = false },
-								-- added with :PylspInstall
-								autoflake = { enabled = false },
-								isort = {
-									enabled = false,
-									profile = "black",
-								},
-								black = {
-									enabled = false,
-									line_length = 88,
-								},
-							},
-							rope = {
-								enabled = false,
-								ropeFolder = vim.fn.getcwd() .. ".ropeproject",
+						rootMarkers = { ".git/" },
+						languages = {
+							python = {
+								require("efmls-configs.linters.flake8"),
+								require("efmls-configs.linters.mypy"),
 							},
 						},
 					},
+					filetypes = { "python" },
 				},
 				texlab = {
 					settings = {
@@ -155,6 +137,8 @@ return {
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua",
+				"mypy",
+				"flake8",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
