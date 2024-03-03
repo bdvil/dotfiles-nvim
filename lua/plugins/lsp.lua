@@ -5,7 +5,7 @@ return {
 
     {
         "VonHeikemen/lsp-zero.nvim",
-        branch = "v2.x",
+        branch = "v3.x",
         dependencies = {
             "neovim/nvim-lspconfig",
             {
@@ -25,120 +25,13 @@ return {
         config = function()
             require("fidget").setup({})
 
-            local lsp = require("lsp-zero").preset("recommended")
-            local mason_lspconfig = require("mason-lspconfig")
+            local lsp_zero = require("lsp-zero")
 
-            lsp.on_attach(function(_, bufnr)
-                lsp.default_keymaps({ buffer = bufnr })
+            lsp_zero.on_attach(function(_, bufnr)
+                lsp_zero.default_keymaps({ buffer = bufnr })
 
                 vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help)
             end)
-
-            mason_lspconfig.setup({
-                ensure_installed = {
-                    "pyright",
-                    "pylsp",
-                    "lua_ls",
-                    "texlab",
-                    "sqlls",
-                },
-            })
-
-
-            local lspconfig = require("lspconfig")
-            lspconfig.pyright.setup({
-                settings = {
-                    pyright = {
-                        analysis = {
-                            stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs/python-type-stubs"
-                        }
-                    }
-                }
-            })
-            lspconfig.pylsp.setup({
-                settings = {
-                    pylsp = {
-                        plugins = {
-                            -- defaults
-                            flake8 = {
-                                enabled = true,
-                            },
-                            autopep8 = { enabled = false },
-                            yapf = { enabled = false },
-                            pyflakes = { enabled = false },
-                            jedi_completion = { enabled = false },
-                            jedi_definition = { enabled = false },
-                            jedi_hover = { enabled = false },
-                            jedi_references = { enabled = false },
-                            jedi_symbols = { enabled = false },
-                            mccade = { enabled = false },
-                            preload = { enabled = false },
-                            pycodestyle = { enabled = false },
-                            rope_autoimport = { enabled = false },
-                            -- added with :PylspInstall
-                            autoflake = { enabled = true },
-                            isort = {
-                                enabled = true,
-                                profile = "black"
-                            },
-                            black = {
-                                enabled = true,
-                                line_length = 88
-                            },
-                        },
-                        rope = {
-                            ropeFolder = vim.fn.getcwd() .. ".ropeproject",
-                        },
-                    }
-                },
-            })
-            lspconfig.lua_ls.setup({
-                settings = {
-                    Lua = {
-                        runtime = {
-                            version = "LuaJIT",
-                        },
-                        diagnostics = {
-                            globals = { "vim" },
-                        },
-                        workspace = {
-                            library = vim.api.nvim_get_runtime_file("", true),
-                            checkThirdParty = false,
-                        },
-                        telemetry = {
-                            enable = false,
-                        },
-                    }
-                }
-            })
-
-            lspconfig.texlab.setup({
-                settings = {
-                    texlab = {
-                        rootDirectory = nil,
-                        build = {
-                            executable = "latexmk",
-                            -- args = { "-pdf", "-interaction=nonstopmode", "%f" },
-                            -- forwardSearchAfter = true,
-                            onSave = true
-                        },
-                        -- forwardSearch = {
-                        --     executable = "okular",
-                        --     args = { "--unique", "file:%p#src:%l%f" }
-                        -- },
-                        chktex = {
-                            onOpenAndSave = true
-                        },
-                        bibtexFormatter = "latexindent",
-                        latexFormatter = "latexindent",
-                        latexindent = {
-                            modifyLineBreaks = true,
-                        },
-                    }
-                }
-            })
-
-            lspconfig.sqlls.setup({})
 
             local format_option = {
                 format_opts = {
@@ -148,29 +41,141 @@ return {
                 servers = {
                     ["lua_ls"] = { "lua" },
                     ["pylsp"] = { "python" },
+                    ["texlab"] = { "tex" },
                 }
             }
 
-            lsp.format_on_save(format_option)
-            lsp.format_mapping("<C-l>", format_option)
+            lsp_zero.format_on_save(format_option)
+            lsp_zero.format_mapping("<C-l>", format_option)
 
-            lsp.set_sign_icons({
+            lsp_zero.set_sign_icons({
                 error = "✘",
                 warn = "▲",
                 hint = "⚑",
                 info = "»"
             })
 
-            lsp.setup()
+            require("mason").setup()
+            local mason_lspconfig = require("mason-lspconfig")
+            local lspconfig = require("lspconfig")
 
-            local ls = require("luasnip")
+            mason_lspconfig.setup({
+                ensure_installed = {
+                    "pyright",
+                    "pylsp",
+                    "lua_ls",
+                    "texlab",
+                    "sqlls",
+                },
+                handlers = {
+                    lsp_zero.default_setup(),
+                    pyright = function()
+                        lspconfig.pyright.setup({
+                            settings = {
+                                pyright = {
+                                    analysis = {
+                                        stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs/python-type-stubs"
+                                    }
+                                }
+                            }
+                        })
+                    end,
+                    pylsp = function()
+                        lspconfig.pylsp.setup({
+                            settings = {
+                                pylsp = {
+                                    plugins = {
+                                        -- defaults
+                                        flake8 = {
+                                            enabled = true,
+                                        },
+                                        autopep8 = { enabled = false },
+                                        yapf = { enabled = false },
+                                        pyflakes = { enabled = false },
+                                        jedi_completion = { enabled = false },
+                                        jedi_definition = { enabled = false },
+                                        jedi_hover = { enabled = false },
+                                        jedi_references = { enabled = false },
+                                        jedi_symbols = { enabled = false },
+                                        mccade = { enabled = false },
+                                        preload = { enabled = false },
+                                        pycodestyle = { enabled = false },
+                                        rope_autoimport = { enabled = false },
+                                        -- added with :PylspInstall
+                                        autoflake = { enabled = false },
+                                        isort = {
+                                            enabled = false,
+                                            profile = "black"
+                                        },
+                                        black = {
+                                            enabled = false,
+                                            line_length = 88
+                                        },
+                                    },
+                                    rope = {
+                                        enabled = false,
+                                        ropeFolder = vim.fn.getcwd() .. ".ropeproject",
+                                    },
+                                }
+                            },
+                        })
+                    end,
+                    lua_ls = function()
+                        lspconfig.lua_ls.setup({
+                            settings = {
+                                Lua = {
+                                    runtime = {
+                                        version = "LuaJIT",
+                                    },
+                                    diagnostics = {
+                                        globals = { "vim" },
+                                    },
+                                    workspace = {
+                                        library = vim.api.nvim_get_runtime_file("", true),
+                                        checkThirdParty = false,
+                                    },
+                                    telemetry = {
+                                        enable = false,
+                                    },
+                                }
+                            }
+                        })
+                    end,
+                    texlab = function()
+                        lspconfig.texlab.setup({
+                            settings = {
+                                texlab = {
+                                    rootDirectory = nil,
+                                    build = {
+                                        executable = "latexmk",
+                                        onSave = true
+                                    },
+                                    chktex = {
+                                        onOpenAndSave = true
+                                    },
+                                    bibtexFormatter = "latexindent",
+                                    latexFormatter = "latexindent",
+                                    latexindent = {
+                                        modifyLineBreaks = true,
+                                    },
+                                }
+                            }
+                        })
+                    end,
+                    sqlls = function()
+                        lspconfig.sqlls.setup({})
+                    end,
+                }
+            })
 
-            vim.keymap.set({ "i", "s" }, "<C-k>", function() ls.expand() end, { silent = true })
-            vim.keymap.set({ "i", "s" }, "<C-l>", function() ls.jump(1) end, { silent = true })
-            vim.keymap.set({ "i", "s" }, "<C-h>", function() ls.jump(-1) end, { silent = true })
+            local lua_snip = require("luasnip")
+
+            vim.keymap.set({ "i", "s" }, "<C-k>", function() lua_snip.expand() end, { silent = true })
+            vim.keymap.set({ "i", "s" }, "<C-l>", function() lua_snip.jump(1) end, { silent = true })
+            vim.keymap.set({ "i", "s" }, "<C-h>", function() lua_snip.jump(-1) end, { silent = true })
             vim.keymap.set({ "i", "s" }, "<C-j>", function()
-                if ls.choice_active() then
-                    ls.change_choice(1)
+                if lua_snip.choice_active() then
+                    lua_snip.change_choice(1)
                 end
             end, { silent = true })
 
@@ -284,15 +289,15 @@ return {
                 sorting = {
                     priority_weight = 1.0,
                     comparators = {
+                        compare.offset,
+                        compare.exact,
+                        compare.score,
+                        compare.scopes,
                         compare.locality,
                         compare.recently_used,
-                        compare.score,
-                        compare.offset,
                         compare.order,
-                        -- compare.scopes,
                         -- compare.sort_text,
-                        -- compare.exact,
-                        -- compare.kind,
+                        compare.kind,
                         -- compare.length,
                     }
                 },
