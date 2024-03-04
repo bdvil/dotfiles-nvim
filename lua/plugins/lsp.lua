@@ -81,7 +81,7 @@ return {
 						languages = {
 							python = {
 								require("efmls-configs.linters.flake8"),
-								require("efmls-configs.linters.mypy"),
+								-- require("efmls-configs.linters.mypy"),
 							},
 						},
 					},
