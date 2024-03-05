@@ -64,7 +64,7 @@ return {
 			local servers = {
 				pyright = {
 					settings = {
-						pyright = {
+						python = {
 							analysis = {
 								stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs/python-type-stubs",
 							},
