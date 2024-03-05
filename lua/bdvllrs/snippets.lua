@@ -116,7 +116,7 @@ local function make_docstring_args_snippets(idx, nodes)
 		end
 	end
 	if nodes["return_type"] then
-		table.insert(sn_nodes, t({ "", "Returns:", "    `" }))
+		table.insert(sn_nodes, t({ "", "", "Returns:", "    `" }))
 		table.insert(sn_nodes, i(idx, nodes.return_type))
 		table.insert(sn_nodes, t("`: "))
 		table.insert(sn_nodes, i(idx + 1))
@@ -143,23 +143,17 @@ local function make_define_self_props_snippets(idx, nodes)
 	return { nodes = sn_nodes, next_idx = idx }
 end
 
-local function python_docstring(_)
-	local nodes = parse_python_funcdef()
-	local sn_nodes = make_docstring_args_snippets(1, nodes)
-	if sn_nodes then
-		return sn(nil, sn_nodes.nodes)
-	else
-		return sn(nil, { i(1) })
-	end
-end
-
-local function python_self_props(_)
-	local nodes = parse_python_funcdef()
-	local sn_nodes = make_define_self_props_snippets(1, nodes)
-	if sn_nodes then
-		return sn(nil, sn_nodes.nodes)
-	else
-		return sn(nil, { i(1) })
+local function python_parse_snippets(build_snippets_fn)
+	return function()
+		local nodes = parse_python_funcdef()
+		local sn_nodes = build_snippets_fn(1, nodes)
+		local out_node
+		if sn_nodes then
+			out_node = sn(nil, sn_nodes.nodes)
+		else
+			out_node = sn(nil, { i(1) })
+		end
+		return out_node
 	end
 end
 
@@ -171,23 +165,18 @@ ls.add_snippets("python", {
 		i(1),
 	}),
 	s("props", {
-		d(1, python_self_props),
+		d(1, python_parse_snippets(make_define_self_props_snippets)),
 		i(0),
 	}),
 
-	s(
-		"docstring",
-		fmta(
-			[[
-"""<start>
-    <params>
-"""<finish>
-        ]],
-			{
-				start = i(1),
-				params = d(2, python_docstring),
-				finish = i(0),
-			}
-		)
-	),
+	s("docstring", {
+		t('"""'),
+		i(1),
+		t({ "", "" }),
+		d(2, python_parse_snippets(make_docstring_args_snippets)),
+		i(3),
+		t({ "", "" }),
+		t('"""'),
+		i(0),
+	}),
 })
