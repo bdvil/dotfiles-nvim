@@ -1,6 +1,5 @@
 return {
 	-- "stevearc/dressing.nvim",
-	"nvim-treesitter/playground",
 	{
 		"mbbill/undotree",
 		config = function()
