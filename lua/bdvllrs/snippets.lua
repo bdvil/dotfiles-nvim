@@ -174,7 +174,6 @@ ls.add_snippets("python", {
 		i(1),
 		t({ "", "" }),
 		d(2, python_parse_snippets(make_docstring_args_snippets)),
-		i(3),
 		t({ "", "" }),
 		t('"""'),
 		i(0),
