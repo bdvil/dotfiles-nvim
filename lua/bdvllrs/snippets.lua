@@ -16,14 +16,16 @@ local function same_text(args, _, _)
 	return args[1][1]
 end
 
-local function get_param_name_and_type(node)
+local function get_param_name_and_type(node, default_type)
 	local node_name = "?"
-	local node_type = "Any"
+	local node_type = default_type
 	if node:type() == "identifier" then
 		node_name = vim.treesitter.get_node_text(node, 0)
 	else
 		for child in node:iter_children() do
-			if child:type() == "identifier" then
+			if child:type() == "dictionary_splat_pattern" or child:type() == "list_splat_pattern" then
+				node_name = get_param_name_and_type(child, default_type).name
+			elseif child:type() == "identifier" then
 				node_name = vim.treesitter.get_node_text(child, 0)
 			elseif child:type() == "type" then
 				node_type = vim.treesitter.get_node_text(child, 0)
@@ -35,10 +37,19 @@ end
 
 local param_handlers = {
 	typed_parameter = function(node)
-		return get_param_name_and_type(node)
+		return get_param_name_and_type(node, "Any")
+	end,
+	typed_default_parameter = function(node)
+		return get_param_name_and_type(node, "Any")
+	end,
+	list_splat_pattern = function(node)
+		return get_param_name_and_type(node, nil)
+	end,
+	dictionary_splat_pattern = function(node)
+		return get_param_name_and_type(node, nil)
 	end,
 	identifier = function(node)
-		local param = get_param_name_and_type(node)
+		local param = get_param_name_and_type(node, "Any")
 		if param.name == "self" then
 			return nil
 		end
@@ -108,11 +119,16 @@ local function make_docstring_args_snippets(idx, nodes)
 
 	if nodes["args"] then
 		for _, arg in ipairs(nodes.args) do
-			table.insert(sn_nodes, t({ "", "    " .. arg.name .. " (`" }))
-			table.insert(sn_nodes, i(idx, arg.type))
-			table.insert(sn_nodes, t("`): "))
-			table.insert(sn_nodes, i(idx + 1))
-			idx = idx + 2
+			table.insert(sn_nodes, t({ "", "    " .. arg.name }))
+			if arg.type then
+				table.insert(sn_nodes, t({ " (`" }))
+				table.insert(sn_nodes, i(idx, arg.type))
+				table.insert(sn_nodes, t("`)"))
+				idx = idx + 1
+			end
+			table.insert(sn_nodes, t(": "))
+			table.insert(sn_nodes, i(idx))
+			idx = idx + 1
 		end
 	end
 	if nodes["return_type"] then
@@ -179,3 +195,27 @@ ls.add_snippets("python", {
 		i(0),
 	}),
 })
+
+-- (function_definition) ; [511:1 - 512:8]
+--  name: (identifier) ; [511:5 - 8]
+--  parameters: (parameters) ; [511:9 - 53]
+--   (typed_parameter) ; [511:10 - 25]
+--    (list_splat_pattern) ; [511:10 - 14]
+--     (identifier) ; [511:11 - 14]
+--    type: (type) ; [511:17 - 25]
+--     (generic_type) ; [511:17 - 25]
+--      (identifier) ; [511:17 - 20]
+--      (type_parameter) ; [511:21 - 25]
+--       (type) ; [511:22 - 24]
+--        (identifier) ; [511:22 - 24]
+--   (typed_parameter) ; [511:29 - 52]
+--    (dictionary_splat_pattern) ; [511:29 - 36]
+--     (identifier) ; [511:31 - 36]
+--    type: (type) ; [511:39 - 52]
+--     (generic_type) ; [511:39 - 52]
+--      (identifier) ; [511:39 - 42]
+--      (type_parameter) ; [511:43 - 52]
+--       (type) ; [511:44 - 46]
+--        (identifier) ; [511:44 - 46]
+--       (type) ; [511:49 - 51]
+--        (identifier) ; [511:49 - 51]
