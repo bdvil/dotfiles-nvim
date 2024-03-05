@@ -16,6 +16,14 @@ local function same_text(args, _, _)
 	return args[1][1]
 end
 
+local function get_type_text(node)
+	local node_type = vim.treesitter.get_node_text(node, 0)
+	node_type = string.gsub(node_type, "\n", "")
+	node_type = string.gsub(node_type, "%s+", " ")
+	node_type = string.gsub(node_type, "\t", "")
+	return node_type
+end
+
 local function get_param_name_and_type(node, default_type)
 	local node_name = "?"
 	local node_type = default_type
@@ -28,7 +36,7 @@ local function get_param_name_and_type(node, default_type)
 			elseif child:type() == "identifier" then
 				node_name = vim.treesitter.get_node_text(child, 0)
 			elseif child:type() == "type" then
-				node_type = vim.treesitter.get_node_text(child, 0)
+				node_type = get_type_text(child)
 			end
 		end
 	end
@@ -74,7 +82,8 @@ local handlers = {
 		return { args = sn_nodes }
 	end,
 	type = function(node)
-		return { return_type = vim.treesitter.get_node_text(node, 0) }
+		local node_type = get_type_text(node)
+		return { return_type = node_type }
 	end,
 }
 
