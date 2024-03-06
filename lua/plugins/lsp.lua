@@ -1,3 +1,20 @@
+local function code_action_request(client, selected_action)
+	local params = vim.lsp.util.make_range_params(nil, client.offset_encoding)
+	params.context = { only = { selected_action }, diagnostics = {} }
+
+	local timeout = 1000
+	local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout)
+	for _, res in pairs(result or {}) do
+		for _, r in pairs(res.result or {}) do
+			if r.edit then
+				vim.lsp.util.apply_workspace_edit(r.edit, client.offset_encoding)
+			else
+				vim.lsp.buf.execute_command(r.command)
+			end
+		end
+	end
+end
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -13,6 +30,7 @@ return {
 			},
 		},
 		config = function()
+			local auformatgroup = vim.api.nvim_create_augroup("LspFormatting", {})
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(event)
 					local builtin = require("telescope.builtin")
@@ -29,6 +47,7 @@ return {
 					map("n", "<leader>ws", builtin.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 					map("n", "<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("n", "<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+					map("n", "<leader>fm", vim.lsp.buf.format, "[F]or[m]at")
 					map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
 					map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 					map("i", "<C-h>", vim.lsp.buf.signature_help, "Signature [H]elp")
@@ -45,6 +64,17 @@ return {
 							callback = vim.lsp.buf.clear_references,
 						})
 					end
+					if client.supports_method("textDocument/formatting") then
+						vim.api.nvim_clear_autocmds({ group = auformatgroup, buffer = event.buf })
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							group = auformatgroup,
+							buffer = event.buf,
+							callback = function()
+								vim.lsp.buf.format()
+								code_action_request(client, "source.organizeImports")
+							end,
+						})
+					end
 				end,
 			})
 
@@ -54,6 +84,9 @@ return {
 			local servers = {
 				pyright = {
 					settings = {
+						pyright = {
+							disableOrganizeImports = true,
+						},
 						python = {
 							analysis = {
 								stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs/python-type-stubs",
@@ -62,12 +95,12 @@ return {
 					},
 				},
 				ruff_lsp = {
-					init_options = {
-						settings = {
-							-- Any extra CLI arguments for `ruff` go here.
-							args = {},
-						},
-					},
+					on_attach = function(client, bufnr)
+						if client.name == "ruff_lsp" then
+							-- Disable hover in favor of Pyright
+							client.server_capabilities.hoverProvider = false
+						end
+					end,
 				},
 				texlab = {
 					settings = {
