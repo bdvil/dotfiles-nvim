@@ -17,31 +17,21 @@ return {
 				callback = function(event)
 					local builtin = require("telescope.builtin")
 
-					local map = function(keys, func, desc)
-						vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+					local map = function(mode, keys, func, desc)
+						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
-					map("gd", builtin.lsp_definitions, "[G]oto [D]efinitions")
-					map("gr", builtin.lsp_references, "[G]oto [R]eferences")
-					map("gI", builtin.lsp_implementations, "[G]oto [I]mplementations")
-					map("<leader>D", builtin.lsp_type_definitions, "Type [D]efinitions")
-					map("<leader>ds", builtin.lsp_document_symbols, "[D]ocument [S]ymbols")
-					map(
-						"<leader>ws",
-						require("telescope.builtin").lsp_dynamic_workspace_symbols,
-						"[W]orkspace [S]ymbols"
-					)
-					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-					map("K", vim.lsp.buf.hover, "Hover Documentation")
-					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-					vim.keymap.set(
-						"i",
-						"<C-h>",
-						vim.lsp.buf.signature_help,
-						{ buffer = event.buf, desc = "LSP: Signature [H]elp" }
-					)
+					map("n", "gd", builtin.lsp_definitions, "[G]oto [D]efinitions")
+					map("n", "gr", builtin.lsp_references, "[G]oto [R]eferences")
+					map("n", "gI", builtin.lsp_implementations, "[G]oto [I]mplementations")
+					map("n", "<leader>D", builtin.lsp_type_definitions, "Type [D]efinitions")
+					map("n", "<leader>ds", builtin.lsp_document_symbols, "[D]ocument [S]ymbols")
+					map("n", "<leader>ws", builtin.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+					map("n", "<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+					map("n", "<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+					map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
+					map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+					map("i", "<C-h>", vim.lsp.buf.signature_help, "Signature [H]elp")
 
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client.server_capabilities.documentHighlightProvider then
@@ -71,21 +61,13 @@ return {
 						},
 					},
 				},
-				efm = {
+				ruff_lsp = {
 					init_options = {
-						documentFormatting = true,
-						documentRangeFormatting = true,
-					},
-					settings = {
-						rootMarkers = { ".git/" },
-						languages = {
-							python = {
-								require("efmls-configs.linters.flake8"),
-								-- require("efmls-configs.linters.mypy"),
-							},
+						settings = {
+							-- Any extra CLI arguments for `ruff` go here.
+							args = {},
 						},
 					},
-					filetypes = { "python" },
 				},
 				texlab = {
 					settings = {
