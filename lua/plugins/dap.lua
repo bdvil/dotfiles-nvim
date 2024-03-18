@@ -110,7 +110,7 @@ return {
 		vim.keymap.set({ "n", "v" }, "<leader>dp", function()
 			dap_widget.preview()
 		end)
-		vim.keymap.set("n", "<leader>ds", function()
+		vim.keymap.set("n", "<leader>das", function()
 			dapui.float_element("scopes", {
 				position = "center",
 				enter = true,
