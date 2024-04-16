@@ -50,7 +50,7 @@ return {
                     map("n", "<leader>fm", vim.lsp.buf.format, "[F]or[m]at")
                     map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
                     map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-                    map("n", "<C-h>", vim.lsp.buf.signature_help, "Signature [H]elp")
+                    map({"n", "i"}, "<C-s>", vim.lsp.buf.signature_help, "[S]ignature Help")
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.server_capabilities.documentHighlightProvider then
@@ -77,6 +77,7 @@ return {
                     end
                 end,
             })
+            vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { standout = true })
 
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
