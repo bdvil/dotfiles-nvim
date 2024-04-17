@@ -30,26 +30,26 @@ vim.keymap.set("t", "<A-h>", "<C-\\><C-N><C-w>h")
 local flash = require("flash")
 
 vim.keymap.set({ "n", "x", "o" }, "<leader>s", function()
-	flash.jump({
-		search = {
-			mode = function(str)
-				return "\\<" .. str
-			end,
-		},
-	})
+    flash.jump({
+        search = {
+            mode = function(str)
+                return "\\<" .. str
+            end,
+        },
+    })
 end)
 vim.keymap.set({ "n", "x", "o" }, "<leader>S", function()
-	flash.treesitter()
+    flash.treesitter()
 end)
 vim.keymap.set("o", "<leader>r", function()
-	flash.remote()
+    flash.remote()
 end)
 vim.keymap.set({ "n", "x", "o" }, "<leader>R", function()
-	flash.treesitter_search()
+    flash.treesitter_search()
 end)
 
 -- pyro
 local move_symbol = require("bdvllrs.pyro")
 vim.keymap.set("n", "<leader>m", function()
-	move_symbol({ pyro_bin = os.getenv("PYRO_BIN") })
+    move_symbol({ pyro_bin = os.getenv("PYRO_BIN") })
 end, { silent = true, noremap = true })

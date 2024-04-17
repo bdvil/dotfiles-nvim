@@ -1,7 +1,6 @@
 local builtin = require("telescope.builtin")
-local actions = require "telescope.actions"
-local action_state = require "telescope.actions.state"
-
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
 
 local find_and_return_file = function(callback)
     builtin.find_files({
@@ -12,8 +11,7 @@ local find_and_return_file = function(callback)
                 callback(selected[1])
             end)
             return true
-        end
-        ,
+        end,
     })
 end
 
@@ -33,7 +31,7 @@ local function set_quickfix(modified_files)
         local filename = file_info.filename
         table.insert(quickfix_list, { filename = filename, lnum = 1 })
     end
-    vim.fn.setqflist({}, 'r', { title = 'Modified Files', items = quickfix_list })
+    vim.fn.setqflist({}, "r", { title = "Modified Files", items = quickfix_list })
 end
 
 local function update_files(edited_files)
@@ -43,7 +41,7 @@ local function update_files(edited_files)
         if bufnr ~= nil and bufnr > 0 then
             local win = vim.fn.bufwinid(bufnr)
             vim.fn.win_gotoid(win)
-            vim.cmd('edit ' .. file_info.filename)
+            vim.cmd("edit " .. file_info.filename)
         end
     end
     vim.fn.win_gotoid(current_win)
@@ -66,31 +64,22 @@ local move_symbol = function(opt)
 
     local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
 
-    local cmd = string.format(
-        "%s move %s %s %d %d",
-        opt.pyro_bin,
-        project_root,
-        current_module,
-        cursor_row,
-        cursor_col
-    )
+    local cmd = string.format("%s move %s %s %d %d", opt.pyro_bin, project_root, current_module, cursor_row, cursor_col)
 
-    find_and_return_file(
-        function(target_module)
-            target_module = target_module:gsub(project_root, "")
-            target_module = path_to_module(target_module)
-            local command = string.format("%s %s", cmd, target_module)
-            vim.cmd("write")
-            local output = execute_command(command)
-            if output ~= nil and output["success"] ~= nil and output["success"] then
-                set_quickfix(output["editedFiles"] or {})
-                update_files(output["editedFiles"] or {})
-            end
-            if output ~= nil and output["success"] ~= nil and not output["success"] then
-                print(output["errorMsg"])
-            end
+    find_and_return_file(function(target_module)
+        target_module = target_module:gsub(project_root, "")
+        target_module = path_to_module(target_module)
+        local command = string.format("%s %s", cmd, target_module)
+        vim.cmd("write")
+        local output = execute_command(command)
+        if output ~= nil and output["success"] ~= nil and output["success"] then
+            set_quickfix(output["editedFiles"] or {})
+            update_files(output["editedFiles"] or {})
         end
-    )
+        if output ~= nil and output["success"] ~= nil and not output["success"] then
+            print(output["errorMsg"])
+        end
+    end)
 end
 
 return move_symbol
