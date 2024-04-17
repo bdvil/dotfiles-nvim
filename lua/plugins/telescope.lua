@@ -11,12 +11,23 @@ return {
         config = function()
             local trouble = require("trouble.providers.telescope")
             local telescope = require("telescope")
+            local find_args = {
+                "--glob", "**/config/*",
+            }
 
             telescope.setup({
                 defaults = {
                     mappings = {
                         i = { ["<C-x>"] = trouble.open_with_trouble },
                         n = { ["<C-x>"] = trouble.open_with_trouble },
+                    },
+                },
+                pickers = {
+                    find_files = {
+                        find_command = { "rg", "--files", unpack(find_args) },
+                    },
+                    live_grep = {
+                        additional_args = find_args,
                     },
                 },
                 extensions = {
@@ -32,8 +43,8 @@ return {
             local builtin = require('telescope.builtin')
 
             vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-            vim.keymap.set('n', '<C-e>', builtin.oldfiles, {})
-            vim.keymap.set('n', '<leader>sf', builtin.find_files, {})
+            vim.keymap.set('n', '<C-e>', builtin.find_files, {})
+            vim.keymap.set('n', '<leader>so', builtin.oldfiles, {})
             vim.keymap.set('n', '<leader>sg', builtin.live_grep, {})
             vim.keymap.set('n', '<leader>sd', builtin.diagnostics, {})
             vim.keymap.set('n', '<leader>sk', builtin.keymaps, {})
