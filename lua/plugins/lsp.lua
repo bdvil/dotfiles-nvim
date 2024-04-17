@@ -50,7 +50,7 @@ return {
                     map("n", "<leader>fm", vim.lsp.buf.format, "[F]or[m]at")
                     map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
                     map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-                    map({"n", "i"}, "<C-s>", vim.lsp.buf.signature_help, "[S]ignature Help")
+                    map({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, "[S]ignature Help")
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.server_capabilities.documentHighlightProvider then
@@ -77,6 +77,7 @@ return {
                     end
                 end,
             })
+
             vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { standout = true })
 
             local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -122,36 +123,36 @@ return {
                         },
                     },
                 },
-                lua_ls = {
-                    settings = {
-                        Lua = {
-                            runtime = { version = "LuaJIT" },
-                            diagnostics = {
-                                globals = { "vim" },
-                            },
-                            workspace = {
-                                checkThirdParty = false,
-                                library = unpack(vim.api.nvim_get_runtime_file("", true)),
-                            },
-                            completion = {
-                                callSnippet = "Replace",
-                            },
-                            telemetry = {
-                                enable = false,
-                            },
-                        },
-                    },
-                },
+                -- lua_ls = {
+                --     settings = {
+                --         Lua = {
+                --             runtime = { version = "LuaJIT" },
+                --             diagnostics = {
+                --                 globals = { "vim" },
+                --             },
+                --             workspace = {
+                --                 checkThirdParty = false,
+                --                 library = unpack(vim.api.nvim_get_runtime_file("", true)),
+                --             },
+                --             completion = {
+                --                 callSnippet = "Replace",
+                --             },
+                --             telemetry = {
+                --                 enable = false,
+                --             },
+                --         },
+                --     },
+                -- },
                 sqlls = {},
             }
 
             require("mason").setup()
 
             local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend({
+            vim.list_extend(ensure_installed, {
                 "stylua",
                 "mypy",
-            }, ensure_installed)
+            })
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
             require("mason-lspconfig").setup({
