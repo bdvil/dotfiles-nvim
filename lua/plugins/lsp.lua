@@ -71,9 +71,18 @@ return {
                             buffer = event.buf,
                             callback = function()
                                 vim.lsp.buf.format()
-                                code_action_request(client, "source.organizeImports")
                             end,
                         })
+
+                        if string.sub(event.file, -3, -1) == ".py" then
+                            vim.api.nvim_create_autocmd("BufWritePre", {
+                                group = auformatgroup,
+                                buffer = event.buf,
+                                callback = function()
+                                    code_action_request(client, "source.organizeImports")
+                                end,
+                            })
+                        end
                     end
                 end,
             })
@@ -123,36 +132,39 @@ return {
                         },
                     },
                 },
-                -- lua_ls = {
-                --     settings = {
-                --         Lua = {
-                --             runtime = { version = "LuaJIT" },
-                --             diagnostics = {
-                --                 globals = { "vim" },
-                --             },
-                --             workspace = {
-                --                 checkThirdParty = false,
-                --                 library = unpack(vim.api.nvim_get_runtime_file("", true)),
-                --             },
-                --             completion = {
-                --                 callSnippet = "Replace",
-                --             },
-                --             telemetry = {
-                --                 enable = false,
-                --             },
-                --         },
-                --     },
-                -- },
+                lua_ls = {
+                    on_init = function(client)
+                        local path = client.workspace_folders[1].name
+                        if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+                            return
+                        end
+
+                        client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+                            runtime = {
+                                version = "LuaJIT",
+                            },
+                            workspace = {
+                                checkThirdParty = false,
+                                library = {
+                                    vim.env.VIMRUNTIME,
+                                },
+                            },
+                        })
+                    end,
+                    settings = {
+                        Lua = {},
+                    },
+                },
                 sqlls = {},
             }
 
             require("mason").setup()
 
             local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, {
+            vim.list_extend({
                 "stylua",
                 "mypy",
-            })
+            }, ensure_installed)
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
             require("mason-lspconfig").setup({
