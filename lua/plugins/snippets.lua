@@ -6,16 +6,16 @@ return {
         config = function()
             local lua_snip = require("luasnip")
 
-            vim.keymap.set({ "i", "s" }, "<C-k>", function()
+            vim.keymap.set({ "i", "s" }, "<C-Y>", function()
                 lua_snip.expand()
             end, { silent = true })
-            vim.keymap.set({ "i", "s" }, "<C-l>", function()
+            vim.keymap.set({ "i", "s" }, "<C-J>", function()
                 lua_snip.jump(1)
             end, { silent = true })
-            vim.keymap.set({ "i", "s" }, "<C-h>", function()
+            vim.keymap.set({ "i", "s" }, "<C-K>", function()
                 lua_snip.jump(-1)
             end, { silent = true })
-            vim.keymap.set({ "i", "s" }, "<C-j>", function()
+            vim.keymap.set({ "i", "s" }, "<C-C>", function()
                 if lua_snip.choice_active() then
                     lua_snip.change_choice(1)
                 end

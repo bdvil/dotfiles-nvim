@@ -43,7 +43,7 @@ return {
                     map("n", "gr", builtin.lsp_references, "[G]oto [R]eferences")
                     map("n", "gI", builtin.lsp_implementations, "[G]oto [I]mplementations")
                     map("n", "<leader>D", builtin.lsp_type_definitions, "Type [D]efinitions")
-                    map("n", "<leader>ds", builtin.lsp_document_symbols, "[D]ocument [S]ymbols")
+                    map("n", "<leader>sb", builtin.lsp_document_symbols, "Document [S]ym[b]ols")
                     map("n", "<leader>ws", builtin.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
                     map("n", "<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
                     map("n", "<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")

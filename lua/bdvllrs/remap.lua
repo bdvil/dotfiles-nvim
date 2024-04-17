@@ -47,9 +47,3 @@ end)
 vim.keymap.set({ "n", "x", "o" }, "<leader>R", function()
     flash.treesitter_search()
 end)
-
--- pyro
-local move_symbol = require("bdvllrs.pyro")
-vim.keymap.set("n", "<leader>m", function()
-    move_symbol({ pyro_bin = os.getenv("PYRO_BIN") })
-end, { silent = true, noremap = true })
