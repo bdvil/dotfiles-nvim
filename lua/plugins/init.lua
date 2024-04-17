@@ -26,11 +26,6 @@ return {
         end,
     },
 
-    {
-        "christoomey/vim-tmux-navigator",
-        lazy = false,
-    },
-
     "lukas-reineke/indent-blankline.nvim",
 
     "norcalli/nvim-colorizer.lua",
