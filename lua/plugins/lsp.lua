@@ -28,8 +28,16 @@ return {
                 "creativenull/efmls-configs-nvim",
                 version = "v1.x.x", -- version is optional, but recommended
             },
+            "folke/neodev.nvim",
         },
         config = function()
+            require("neodev").setup({
+                override = function(root_dir, library)
+                    library.enabled = true
+                    library.plugins = true
+                end,
+            })
+
             local auformatgroup = vim.api.nvim_create_augroup("LspFormatting", {})
             vim.api.nvim_create_autocmd("LspAttach", {
                 callback = function(event)
@@ -152,7 +160,11 @@ return {
                         })
                     end,
                     settings = {
-                        Lua = {},
+                        Lua = {
+                            completion = {
+                                callSnippet = "Replace"
+                            }
+                        },
                     },
                 },
                 sqlls = {},
