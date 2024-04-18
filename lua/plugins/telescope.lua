@@ -12,8 +12,7 @@ return {
             local trouble = require("trouble.providers.telescope")
             local telescope = require("telescope")
             local find_args = {
-                "--glob",
-                "**/config/*",
+                "--no-ignore-vcs",
             }
 
             telescope.setup({
