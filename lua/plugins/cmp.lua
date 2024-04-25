@@ -30,26 +30,19 @@ return {
             luasnip.config.setup({})
 
             cmp.setup({
-                sources = {
+                sources = cmp.config.sources({
                     { name = "luasnip" },
                     { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
                     { name = "path" },
                     { name = "buffer",                 keyword_length = 3 },
-                },
-                mapping = {
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                }),
+                mapping = cmp.mapping.preset.insert({
                     ["<C-a>"] = cmp.mapping.complete(),
                     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
                     ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                },
+                }),
                 preselect = "item",
-                completion = {
-                    completeopt = "menu,menuone,noinsert",
-                    side_padding = 5,
-                },
                 formatting = {
                     format = function(entry, vim_item)
                         if vim.tbl_contains({ "path" }, entry.source.name) then
