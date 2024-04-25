@@ -237,13 +237,13 @@ local function python_test()
 end
 
 ls.add_snippets("python", {
-    s("prop", {
+    s("propcustom", {
         t("self."),
         f(same_text, { 1 }, {}),
         t(" = "),
         i(1),
     }),
-    s("tprop", {
+    s("prop", {
         d(1, python_parse_prop),
         i(0),
     }),
