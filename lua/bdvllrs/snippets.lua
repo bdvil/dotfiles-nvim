@@ -170,7 +170,7 @@ local function python_parse_prop()
     local nodes = parse_python_funcdef()
 
     if nodes["args"] then
-        for k, arg in ipairs(nodes.args) do
+        for _, arg in ipairs(nodes.args) do
             local prop_group = {}
             table.insert(prop_group, t("self."))
             table.insert(prop_group, f(same_text, { 1 }))
@@ -230,10 +230,6 @@ local function python_parse_snippets(build_snippets_fn)
         end
         return out_node
     end
-end
-
-local function python_test()
-    return sn(nil, { c(1, { i(nil, "test1"), i(nil, "test2") }) })
 end
 
 ls.add_snippets("python", {

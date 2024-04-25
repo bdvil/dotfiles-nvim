@@ -31,12 +31,7 @@ return {
             "folke/neodev.nvim",
         },
         config = function()
-            require("neodev").setup({
-                override = function(root_dir, library)
-                    library.enabled = true
-                    library.plugins = true
-                end,
-            })
+            require("neodev").setup()
 
             local auformatgroup = vim.api.nvim_create_augroup("LspFormatting", {})
             vim.api.nvim_create_autocmd("LspAttach", {
@@ -141,29 +136,29 @@ return {
                     },
                 },
                 lua_ls = {
-                    on_init = function(client)
-                        local path = client.workspace_folders[1].name
-                        if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
-                            return
-                        end
-
-                        client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-                            runtime = {
-                                version = "LuaJIT",
-                            },
-                            workspace = {
-                                checkThirdParty = false,
-                                library = {
-                                    vim.env.VIMRUNTIME,
-                                },
-                            },
-                        })
-                    end,
+                    -- on_init = function(client)
+                    --     local path = client.workspace_folders[1].name
+                    --     if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+                    --         return
+                    --     end
+                    --
+                    --     client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+                    --         runtime = {
+                    --             version = "LuaJIT",
+                    --         },
+                    --         workspace = {
+                    --             checkThirdParty = false,
+                    --             library = {
+                    --                 vim.env.VIMRUNTIME,
+                    --             },
+                    --         },
+                    --     })
+                    -- end,
                     settings = {
                         Lua = {
                             completion = {
-                                callSnippet = "Replace"
-                            }
+                                callSnippet = "Replace",
+                            },
                         },
                     },
                 },
@@ -173,10 +168,10 @@ return {
             require("mason").setup()
 
             local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend({
+            vim.list_extend(ensure_installed, {
                 "stylua",
                 "mypy",
-            }, ensure_installed)
+            })
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
             require("mason-lspconfig").setup({
