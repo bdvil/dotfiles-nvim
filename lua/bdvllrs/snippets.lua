@@ -7,6 +7,7 @@ local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 local d = ls.dynamic_node
+local c = ls.choice_node
 
 local function same_text(args, _, _)
     return args[1][1]
@@ -155,13 +156,66 @@ local function make_define_self_props_snippets(idx, nodes)
             else
                 table.insert(sn_nodes, t({ "", "self." }))
             end
-            table.insert(sn_nodes, i(idx, arg.name))
+            table.insert(sn_nodes, f(same_text, { idx }))
             table.insert(sn_nodes, t(" = "))
-            table.insert(sn_nodes, t(arg.name))
+            table.insert(sn_nodes, i(idx, arg.name))
             idx = idx + 1
         end
     end
     return { nodes = sn_nodes, next_idx = idx }
+end
+
+local function python_parse_prop()
+    local sn_nodes = {}
+    local nodes = parse_python_funcdef()
+
+    if nodes["args"] then
+        for k, arg in ipairs(nodes.args) do
+            local prop_group = {}
+            table.insert(prop_group, t("self."))
+            table.insert(prop_group, f(same_text, { 1 }))
+            table.insert(prop_group, t(" = "))
+            table.insert(prop_group, i(1, arg.name))
+            table.insert(sn_nodes, sn(nil, prop_group))
+        end
+    end
+    return sn(nil, { c(1, sn_nodes) })
+end
+
+local function python_argdoc()
+    local nodes = parse_python_funcdef()
+
+    local sn_nodes = {}
+    if nodes["args"] then
+        for _, arg in ipairs(nodes.args) do
+            local arg_group = {}
+            local idx = 1
+            table.insert(arg_group, t({ arg.name }))
+            if arg.type then
+                table.insert(arg_group, t({ " (`" }))
+                table.insert(arg_group, i(idx, arg.type))
+                table.insert(arg_group, t("`)"))
+                idx = idx + 1
+            end
+            table.insert(arg_group, t(": "))
+            table.insert(arg_group, i(idx))
+            table.insert(sn_nodes, sn(nil, arg_group))
+        end
+    end
+    return sn(nil, { c(1, sn_nodes) })
+end
+
+local function python_returndoc()
+    local nodes = parse_python_funcdef()
+
+    local sn_nodes = {}
+    if nodes["return_type"] then
+        table.insert(sn_nodes, t({ "Returns:", "    `" }))
+        table.insert(sn_nodes, i(1, nodes.return_type))
+        table.insert(sn_nodes, t("`: "))
+        table.insert(sn_nodes, i(2))
+    end
+    return sn(nil, sn_nodes)
 end
 
 local function python_parse_snippets(build_snippets_fn)
@@ -178,6 +232,10 @@ local function python_parse_snippets(build_snippets_fn)
     end
 end
 
+local function python_test()
+    return sn(nil, { c(1, { i(nil, "test1"), i(nil, "test2") }) })
+end
+
 ls.add_snippets("python", {
     s("prop", {
         t("self."),
@@ -185,11 +243,22 @@ ls.add_snippets("python", {
         t(" = "),
         i(1),
     }),
+    s("tprop", {
+        d(1, python_parse_prop),
+        i(0),
+    }),
     s("props", {
         d(1, python_parse_snippets(make_define_self_props_snippets)),
         i(0),
     }),
-
+    s("argdoc", {
+        d(1, python_argdoc),
+        i(0),
+    }),
+    s("returndoc", {
+        d(1, python_returndoc),
+        i(0),
+    }),
     s("docstring", {
         t({ '"""', "" }),
         i(1),
