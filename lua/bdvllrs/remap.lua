@@ -25,25 +25,3 @@ vim.keymap.set("n", "<C-w>u", ":source ~/.session.nvim<CR>")
 -- Terminal
 vim.keymap.set("t", "<ESC>", "<C-\\><C-N>")
 vim.keymap.set("t", "<A-h>", "<C-\\><C-N><C-w>h")
-
--- flash
-local flash = require("flash")
-
-vim.keymap.set({ "n", "x", "o" }, "<leader>s", function()
-    flash.jump({
-        search = {
-            mode = function(str)
-                return "\\<" .. str
-            end,
-        },
-    })
-end)
-vim.keymap.set({ "n", "x", "o" }, "<leader>S", function()
-    flash.treesitter()
-end)
-vim.keymap.set("o", "<leader>r", function()
-    flash.remote()
-end)
-vim.keymap.set({ "n", "x", "o" }, "<leader>R", function()
-    flash.treesitter_search()
-end)
