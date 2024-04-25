@@ -12,7 +12,7 @@ return {
             vim.keymap.set({ "i", "s" }, "<C-D>", function()
                 lua_snip.jump(-1)
             end, { silent = true })
-            vim.keymap.set({ "i", "s" }, "<C-O>", function()
+            vim.keymap.set({ "i", "s" }, "<C-C>", function()
                 if lua_snip.choice_active() then
                     lua_snip.change_choice(1)
                 end
