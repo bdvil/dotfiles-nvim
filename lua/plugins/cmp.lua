@@ -42,8 +42,12 @@ return {
                     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
                     ["<C-f>"] = cmp.mapping.scroll_docs(4),
                 }),
-                preselect = "item",
+                completion = {
+                    completeopt = "menu,menuone,noinsert",
+                },
                 formatting = {
+                    expandable_indicator = true,
+                    fields = { "abbr", "kind", "menu" },
                     format = function(entry, vim_item)
                         if vim.tbl_contains({ "path" }, entry.source.name) then
                             local icon, hl_group =
