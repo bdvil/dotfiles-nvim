@@ -23,7 +23,16 @@ return {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
-            { "j-hui/fidget.nvim", opt = {} },
+            {
+                "j-hui/fidget.nvim",
+                opt = {
+                    notification = {
+                        window = {
+                            winblend = 0,
+                        },
+                    },
+                },
+            },
             {
                 "creativenull/efmls-configs-nvim",
                 version = "v1.x.x", -- version is optional, but recommended
