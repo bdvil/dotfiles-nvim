@@ -22,6 +22,10 @@ return {
                     ["g\\"] = "actions.toggle_trash",
                 },
                 use_default_keymaps = false,
+                view_options = {
+                    -- Show files and directories that start with "."
+                    show_hidden = true,
+                },
             })
 
             vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
