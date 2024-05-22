@@ -172,6 +172,11 @@ return {
                     },
                 },
                 sqlls = {},
+                html = {
+                    capabilities = {
+                        textDocument = { completion = { completionItem = { snippetSupport = true } } },
+                    },
+                },
             }
 
             require("mason").setup()
