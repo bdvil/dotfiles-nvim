@@ -9,7 +9,7 @@ return {
             "nvim-telescope/telescope-ui-select.nvim",
         },
         config = function()
-            local trouble = require("trouble.providers.telescope")
+            local trouble = require("trouble.sources.telescope")
             local telescope = require("telescope")
             local find_args = {
                 "--no-ignore-vcs",
@@ -18,8 +18,8 @@ return {
             telescope.setup({
                 defaults = {
                     mappings = {
-                        i = { ["<C-x>"] = trouble.open_with_trouble },
-                        n = { ["<C-x>"] = trouble.open_with_trouble },
+                        i = { ["<C-x>"] = trouble.open },
+                        n = { ["<C-x>"] = trouble.open },
                     },
                 },
                 pickers = {
