@@ -25,7 +25,7 @@ return {
             "WhoIsSethDaniel/mason-tool-installer.nvim",
             {
                 "j-hui/fidget.nvim",
-                opt = {
+                opts = {
                     notification = {
                         window = {
                             winblend = 0,
