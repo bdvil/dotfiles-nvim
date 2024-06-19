@@ -15,6 +15,7 @@ return {
                     "latex",
                     "markdown",
                     "sql",
+                    "go",
                 },
 
                 sync_install = false,

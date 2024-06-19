@@ -177,6 +177,7 @@ return {
                         textDocument = { completion = { completionItem = { snippetSupport = true } } },
                     },
                 },
+                gopls = {},
             }
 
             require("mason").setup()
