@@ -117,9 +117,9 @@ return {
                         },
                     },
                 },
-                ruff_lsp = {
+                ruff = {
                     on_attach = function(client, bufnr)
-                        if client.name == "ruff_lsp" then
+                        if client.name == "ruff" then
                             -- Disable hover in favor of Pyright
                             client.server_capabilities.hoverProvider = false
                         end
@@ -185,7 +185,7 @@ return {
             local ensure_installed = {
                 "stylua",
                 "pyright",
-                "ruff_lsp",
+                "ruff",
                 "mypy",
             }
 
