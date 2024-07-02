@@ -1,16 +1,15 @@
-local function code_action_request(client, selected_action)
-    local params = vim.lsp.util.make_range_params(nil, client.offset_encoding)
-    params.context = { only = { selected_action }, diagnostics = {} }
+local function code_action_resolve_request(client, selected_action)
+    local params = {
+        data = vim.uri_from_bufnr(0),
+        kind = selected_action,
+        title = selected_action,
+    }
 
     local timeout = 1000
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout)
+    local result = vim.lsp.buf_request_sync(0, "codeAction/resolve", params, timeout)
     for _, res in pairs(result or {}) do
-        for _, r in pairs(res.result or {}) do
-            if r.edit then
-                vim.lsp.util.apply_workspace_edit(r.edit, client.offset_encoding)
-            else
-                vim.lsp.buf.execute_command(r.command)
-            end
+        if res.result and res.result.edit then
+            vim.lsp.util.apply_workspace_edit(res.result.edit, client.offset_encoding)
         end
     end
 end
@@ -76,7 +75,7 @@ return {
                             callback = vim.lsp.buf.clear_references,
                         })
                     end
-                    if client.supports_method("textDocument/formatting") then
+                    if client and client.supports_method("textDocument/formatting") then
                         vim.api.nvim_clear_autocmds({ group = auformatgroup, buffer = event.buf })
                         vim.api.nvim_create_autocmd("BufWritePre", {
                             group = auformatgroup,
@@ -91,7 +90,7 @@ return {
                                 group = auformatgroup,
                                 buffer = event.buf,
                                 callback = function()
-                                    code_action_request(client, "source.organizeImports")
+                                    code_action_resolve_request(client, "source.organizeImports.ruff")
                                 end,
                             })
                         end
@@ -112,7 +111,7 @@ return {
                         },
                         python = {
                             analysis = {
-                                stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs/python-type-stubs",
+                                stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
                             },
                         },
                     },
