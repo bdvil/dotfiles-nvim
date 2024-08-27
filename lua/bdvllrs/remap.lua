@@ -22,6 +22,11 @@ vim.keymap.set("v", "<leader>d", '"_d')
 vim.keymap.set("n", "<C-w>o", ":mksession! ~/.session.nvim<CR>:wincmd o<CR>")
 vim.keymap.set("n", "<C-w>u", ":source ~/.session.nvim<CR>")
 
+vim.keymap.set("n", "<C-Left>", "<C-w>h")
+vim.keymap.set("n", "<C-Right>", "<C-w>l")
+vim.keymap.set("n", "<C-Up>", "<C-w>k")
+vim.keymap.set("n", "<C-Down>", "<C-w>j")
+
 -- Terminal
 vim.keymap.set("t", "<ESC>", "<C-\\><C-N>")
 vim.keymap.set("t", "<A-h>", "<C-\\><C-N><C-w>h")
