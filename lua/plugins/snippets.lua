@@ -9,7 +9,7 @@ return {
             vim.keymap.set({ "i", "s" }, "<C-F>", function()
                 lua_snip.jump(1)
             end, { silent = true })
-            vim.keymap.set({ "i", "s" }, "<C-D>", function()
+            vim.keymap.set({ "i", "s" }, "<C-B>", function()
                 lua_snip.jump(-1)
             end, { silent = true })
             vim.keymap.set({ "i", "s" }, "<C-C>", function()
