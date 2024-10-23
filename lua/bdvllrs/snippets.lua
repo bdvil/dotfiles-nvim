@@ -169,7 +169,7 @@ local function python_parse_prop()
     local sn_nodes = {}
     local nodes = parse_python_funcdef()
 
-    if nodes["args"] then
+    if nodes and nodes["args"] then
         for _, arg in ipairs(nodes.args) do
             local prop_group = {}
             table.insert(prop_group, t("self."))
@@ -186,7 +186,7 @@ local function python_argdoc()
     local nodes = parse_python_funcdef()
 
     local sn_nodes = {}
-    if nodes["args"] then
+    if nodes and nodes["args"] then
         for _, arg in ipairs(nodes.args) do
             local arg_group = {}
             local idx = 1
@@ -209,7 +209,7 @@ local function python_returndoc()
     local nodes = parse_python_funcdef()
 
     local sn_nodes = {}
-    if nodes["return_type"] then
+    if nodes and nodes["return_type"] then
         table.insert(sn_nodes, t({ "Returns:", "    `" }))
         table.insert(sn_nodes, i(1, nodes.return_type))
         table.insert(sn_nodes, t("`: "))
