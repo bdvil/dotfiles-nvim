@@ -177,6 +177,9 @@ return {
                     },
                 },
                 gopls = {},
+                elixirls = {
+                    cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
+                },
             }
 
             require("mason").setup()

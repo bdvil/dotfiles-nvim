@@ -16,6 +16,7 @@ return {
                     "markdown",
                     "sql",
                     "go",
+                    "elixir",
                 },
 
                 sync_install = false,
