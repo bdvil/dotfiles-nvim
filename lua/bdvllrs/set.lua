@@ -52,3 +52,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 vim.cmd.colorscheme("catppuccin")
+-- add setting to show non-breaking space character
+vim.opt.list = true
+vim.opt.listchars = { nbsp = "␣" }
