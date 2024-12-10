@@ -55,3 +55,11 @@ vim.cmd.colorscheme("catppuccin")
 -- add setting to show non-breaking space character
 vim.opt.list = true
 vim.opt.listchars = { nbsp = "␣" }
+
+vim.filetype.add({
+    extension = {
+        jinja = "html",
+        jinja2 = "html",
+        j2 = "html",
+    },
+})

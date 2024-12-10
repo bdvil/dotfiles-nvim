@@ -180,7 +180,22 @@ return {
                 elixirls = {
                     cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
                 },
-                jinja_lsp = {},
+                jinja_lsp = {
+                    default_config = {
+                        name = "jinja-lsp",
+                        cmd = { "path_to_lsp_or_command" },
+                        filetypes = { "jinja", "python" },
+                        root_dir = function(fname)
+                            return "."
+                            --return nvim_lsp.util.find_git_ancestor(fname)
+                        end,
+                        init_options = {
+                            templates = "./templates",
+                            backend = { "./src" },
+                            lang = "python",
+                        },
+                    },
+                },
             }
 
             require("mason").setup()
