@@ -180,6 +180,7 @@ return {
                 elixirls = {
                     cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
                 },
+                jinja_lsp = {},
             }
 
             require("mason").setup()
