@@ -58,8 +58,10 @@ vim.opt.listchars = { nbsp = "␣" }
 
 vim.filetype.add({
     extension = {
-        jinja = "html",
-        jinja2 = "html",
-        j2 = "html",
+        jinja = "jinja",
+        jinja2 = "jinja",
+        j2 = "jinja",
     },
 })
+
+vim.treesitter.language.register("html", "jinja")

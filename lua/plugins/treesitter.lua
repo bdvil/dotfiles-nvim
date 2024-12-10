@@ -17,6 +17,9 @@ return {
                     "sql",
                     "go",
                     "elixir",
+                    "html",
+                    "javascript",
+                    "css",
                 },
 
                 sync_install = false,
