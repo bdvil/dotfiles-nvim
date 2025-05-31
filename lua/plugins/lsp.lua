@@ -229,9 +229,7 @@ return {
             })
 
             vim.diagnostic.config({
-                virtual_text = {
-                    source = true,
-                },
+                virtual_lines = true,
                 float = {
                     source = true,
                 },
