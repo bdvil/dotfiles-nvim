@@ -79,9 +79,6 @@ return {
                             callback = vim.lsp.buf.clear_references,
                         })
                     end
-                    if client and client:supports_method('textDocument/completion') then
-                        vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
-                    end
 
                     if client and client:supports_method("textDocument/formatting") then
                         vim.api.nvim_clear_autocmds({ group = auformatgroup, buffer = event.buf })
