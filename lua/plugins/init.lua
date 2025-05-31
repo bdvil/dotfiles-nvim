@@ -28,8 +28,6 @@ return {
         },
     },
 
-    "mrjones2014/nvim-ts-rainbow",
-
     "windwp/nvim-autopairs",
     {
         "numToStr/Comment.nvim",
