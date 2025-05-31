@@ -45,6 +45,7 @@ return {
             require("neodev").setup()
 
             local auformatgroup = vim.api.nvim_create_augroup("LspFormatting", {})
+            local organizeimportgroup = vim.api.nvim_create_augroup("LspOrganizeImport", {})
             vim.api.nvim_create_autocmd("LspAttach", {
                 callback = function(event)
                     local builtin = require("telescope.builtin")
@@ -91,16 +92,32 @@ return {
                                 vim.lsp.buf.format()
                             end,
                         })
+                    end
 
-                        if string.sub(event.file, -3, -1) == ".py" and client.name == "ruff" then
-                            vim.api.nvim_create_autocmd("BufWritePre", {
-                                group = auformatgroup,
-                                buffer = event.buf,
-                                callback = function()
-                                    code_action_resolve_request(client, "source.organizeImports.ruff")
-                                end,
-                            })
-                        end
+                    if client and client.name == "ruff" then
+                        vim.api.nvim_create_autocmd("BufWritePre", {
+                            group = organizeimportgroup,
+                            buffer = event.buf,
+                            callback = function()
+                                code_action_resolve_request(client, "source.organizeImports.ruff")
+                            end,
+                        })
+                    end
+                end,
+            })
+
+            vim.api.nvim_create_autocmd("LspDetach", {
+                callback = function(event)
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    if client and client:supports_method('textDocument/formatting') then
+                        vim.api.nvim_clear_autocmds({
+                            group = auformatgroup,
+                        })
+                    end
+                    if client and client.name == "ruff" then
+                        vim.api.nvim_clear_autocmds({
+                            group = organizeimportgroup,
+                        })
                     end
                 end,
             })
