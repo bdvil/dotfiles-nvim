@@ -17,11 +17,14 @@ end
 return {
     {
         "neovim/nvim-lspconfig",
+        version = "v2.x.x",
         dependencies = {
             "microsoft/python-type-stubs",
             "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            {
+                "williamboman/mason-lspconfig.nvim",
+                version = "v2.x.x",
+            },
             {
                 "j-hui/fidget.nvim",
                 opts = {
@@ -75,7 +78,11 @@ return {
                             callback = vim.lsp.buf.clear_references,
                         })
                     end
-                    if client and client.supports_method("textDocument/formatting") then
+                    if client and client:supports_method('textDocument/completion') then
+                        vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
+                    end
+
+                    if client and client:supports_method("textDocument/formatting") then
                         vim.api.nvim_clear_autocmds({ group = auformatgroup, buffer = event.buf })
                         vim.api.nvim_create_autocmd("BufWritePre", {
                             group = auformatgroup,
@@ -85,7 +92,7 @@ return {
                             end,
                         })
 
-                        if string.sub(event.file, -3, -1) == ".py" then
+                        if string.sub(event.file, -3, -1) == ".py" and client.name == "ruff" then
                             vim.api.nvim_create_autocmd("BufWritePre", {
                                 group = auformatgroup,
                                 buffer = event.buf,
@@ -103,120 +110,105 @@ return {
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-            local servers = {
-                pyright = {
-                    settings = {
-                        pyright = {
-                            disableOrganizeImports = true,
-                        },
-                        python = {
-                            analysis = {
-                                stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
-                            },
+            vim.lsp.config("pyright", {
+                settings = {
+                    pyright = {
+                        disableOrganizeImports = true,
+                    },
+                    python = {
+                        analysis = {
+                            stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
                         },
                     },
                 },
-                ruff = {
-                    on_attach = function(client, bufnr)
-                        if client.name == "ruff" then
-                            -- Disable hover in favor of Pyright
-                            client.server_capabilities.hoverProvider = false
+            })
+            vim.lsp.config("ruff", {
+                on_attach = function(client, bufnr)
+                    if client.name == "ruff" then
+                        -- Disable hover in favor of Pyright
+                        client.server_capabilities.hoverProvider = false
+                    end
+                end,
+            })
+            vim.lsp.config('lua_ls', {
+                on_init = function(client)
+                    if client.workspace_folders then
+                        local path = client.workspace_folders[1].name
+                        if
+                            path ~= vim.fn.stdpath('config')
+                            and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+                        then
+                            return
                         end
-                    end,
-                },
-                texlab = {
-                    settings = {
-                        texlab = {
-                            rootDirectory = nil,
-                            build = {
-                                executable = "latexmk",
-                                onSave = true,
+                    end
+
+                    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                        runtime = {
+                            version = 'LuaJIT',
+                            path = {
+                                'lua/?.lua',
+                                'lua/?/init.lua',
                             },
-                            chktex = {
-                                onOpenAndSave = true,
-                            },
-                            bibtexFormatter = "latexindent",
-                            latexFormatter = "latexindent",
-                            latexindent = {
-                                modifyLineBreaks = true,
-                            },
+                        },
+                        workspace = {
+                            checkThirdParty = false,
+                            library = {
+                                vim.env.VIMRUNTIME
+                                -- Depending on the usage, you might want to add additional paths
+                                -- here.
+                                -- '${3rd}/luv/library'
+                                -- '${3rd}/busted/library'
+                            }
+                        }
+                    })
+                end,
+                settings = {
+                    Lua = {
+                        completion = {
+                            callSnippet = "Replace",
+                        },
+                    },
+                }
+            })
+            vim.lsp.config("texlab", {
+                settings = {
+                    texlab = {
+                        rootDirectory = nil,
+                        build = {
+                            executable = "latexmk",
+                            onSave = true,
+                        },
+                        chktex = {
+                            onOpenAndSave = true,
+                        },
+                        bibtexFormatter = "latexindent",
+                        latexFormatter = "latexindent",
+                        latexindent = {
+                            modifyLineBreaks = true,
                         },
                     },
                 },
-                lua_ls = {
-                    -- on_init = function(client)
-                    --     local path = client.workspace_folders[1].name
-                    --     if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
-                    --         return
-                    --     end
-                    --
-                    --     client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-                    --         runtime = {
-                    --             version = "LuaJIT",
-                    --         },
-                    --         workspace = {
-                    --             checkThirdParty = false,
-                    --             library = {
-                    --                 vim.env.VIMRUNTIME,
-                    --             },
-                    --         },
-                    --     })
-                    -- end,
-                    settings = {
-                        Lua = {
-                            completion = {
-                                callSnippet = "Replace",
-                            },
-                        },
-                    },
+            })
+            vim.lsp.config("sqlls", {})
+            vim.lsp.config("html", {
+                capabilities = {
+                    textDocument = { completion = { completionItem = { snippetSupport = true } } },
                 },
-                sqlls = {},
-                html = {
-                    capabilities = {
-                        textDocument = { completion = { completionItem = { snippetSupport = true } } },
-                    },
-                },
-                gopls = {},
-                elixirls = {
-                    cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
-                },
-                -- jinja_lsp = {
-                --     default_config = {
-                --         name = "jinja-lsp",
-                --         cmd = { "path_to_lsp_or_command" },
-                --         filetypes = { "jinja", "python" },
-                --         root_dir = function(fname)
-                --             return "."
-                --             --return nvim_lsp.util.find_git_ancestor(fname)
-                --         end,
-                --         init_options = {
-                --             templates = "./templates",
-                --             backend = { "./src" },
-                --             lang = "python",
-                --         },
-                --     },
-                -- },
-            }
+            })
+            vim.lsp.config("gopls", {})
+            vim.lsp.config("elixirls", {
+                cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
+            })
 
             require("mason").setup()
 
-            local ensure_installed = {
-                "stylua",
-                "pyright",
-                "ruff",
-                "mypy",
-            }
-
-            require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
             require("mason-lspconfig").setup({
-                handlers = {
-                    function(server_name)
-                        local server = servers[server_name] or {}
-                        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                        require("lspconfig")[server_name].setup(server)
-                    end,
+                ensure_installed = {
+                    "pyright",
+                    "ruff",
+                    "lua_ls",
                 },
+                automatic_enable = true,
             })
 
             vim.diagnostic.config({
