@@ -54,7 +54,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.cmd.colorscheme("catppuccin")
 -- add setting to show non-breaking space character
 vim.opt.list = true
-vim.opt.listchars = { nbsp = "␣" }
+vim.opt.listchars = { nbsp = "␣", tab = ">-" }
 
 vim.filetype.add({
     extension = {
@@ -65,3 +65,12 @@ vim.filetype.add({
 })
 
 vim.treesitter.language.register("html", "jinja")
+
+vim.api.nvim_create_user_command("OpenInMousepad", function(opts)
+    local start_line = opts.line1
+    local end_line = opts.line2
+    vim.cmd(string.format("%d,%dw! /tmp/nvim_clip.txt", start_line, end_line))
+    vim.fn.jobstart({ "mousepad", "/tmp/nvim_clip.txt" }, { detach = true })
+end, { range = true })
+
+vim.keymap.set("v", "<leader>y", ":OpenInMousepad<CR>", { desc = "Open in Mousepad editor for copy" })

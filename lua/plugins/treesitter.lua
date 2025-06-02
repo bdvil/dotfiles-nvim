@@ -12,7 +12,6 @@ return {
                     "bash",
                     "python",
                     "yaml",
-                    "latex",
                     "markdown",
                     "sql",
                     "go",
