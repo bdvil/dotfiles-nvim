@@ -216,7 +216,15 @@ return {
 
             require("mason").setup()
 
+            local lspconfig = require("lspconfig")
             require("mason-lspconfig").setup({
+                handlers = {
+                    function(server_name)
+                        lspconfig[server_name].setup({
+                            capabilities = capabilities,
+                        })
+                    end,
+                },
                 ensure_installed = {
                     "pyright",
                     "ruff",
