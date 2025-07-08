@@ -120,6 +120,35 @@ end
 local function make_docstring_args_snippets(idx, nodes)
     local sn_nodes = {}
     if next(nodes.args) ~= nil then
+        table.insert(sn_nodes, t({ "", "Parameters", "----------", "" }))
+    end
+
+    if nodes["args"] then
+        for _, arg in ipairs(nodes.args) do
+            table.insert(sn_nodes, t({ arg.name }))
+            if arg.type then
+                table.insert(sn_nodes, t({ " : " }))
+                table.insert(sn_nodes, i(idx, arg.type))
+                idx = idx + 1
+            end
+            table.insert(sn_nodes, t({ "", "    " }))
+            table.insert(sn_nodes, i(idx))
+            table.insert(sn_nodes, t({ "", "" }))
+            idx = idx + 1
+        end
+    end
+    if nodes["return_type"] then
+        table.insert(sn_nodes, t({ "", "Returns", "-------", "" }))
+        table.insert(sn_nodes, i(idx, nodes.return_type))
+        table.insert(sn_nodes, t({ "", "    " }))
+        table.insert(sn_nodes, i(idx + 1))
+    end
+    return { nodes = sn_nodes, next_idx = idx + 2 }
+end
+
+local function make_docstring_args_snippets_google(idx, nodes)
+    local sn_nodes = {}
+    if next(nodes.args) ~= nil then
         table.insert(sn_nodes, t({ "", "Args:" }))
     end
 
@@ -190,6 +219,28 @@ local function python_argdoc()
         for _, arg in ipairs(nodes.args) do
             local arg_group = {}
             local idx = 1
+            table.insert(arg_group, t(arg.name))
+            if arg.type then
+                table.insert(arg_group, t(" : "))
+                table.insert(arg_group, i(idx, arg.type))
+                idx = idx + 1
+            end
+            table.insert(arg_group, t({ "", "    " }))
+            table.insert(arg_group, i(idx))
+            table.insert(sn_nodes, sn(nil, arg_group))
+        end
+    end
+    return sn(nil, { c(1, sn_nodes) })
+end
+
+local function python_argdoc_google()
+    local nodes = parse_python_funcdef()
+
+    local sn_nodes = {}
+    if nodes and nodes["args"] then
+        for _, arg in ipairs(nodes.args) do
+            local arg_group = {}
+            local idx = 1
             table.insert(arg_group, t({ arg.name }))
             if arg.type then
                 table.insert(arg_group, t({ " (`" }))
@@ -204,6 +255,7 @@ local function python_argdoc()
     end
     return sn(nil, { c(1, sn_nodes) })
 end
+
 
 local function python_returndoc()
     local nodes = parse_python_funcdef()
