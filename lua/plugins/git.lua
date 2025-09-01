@@ -6,14 +6,14 @@ return {
             "sindrets/diffview.nvim",
             "nvim-telescope/telescope.nvim",
         },
-        keys = {
-            { "<leader>k",   ":Neogit<CR>" },
-            { "<leader>gpl", ":Neogit pull<CR>" },
-            { "<leader>gph", ":Neogit push<CR>" },
-            { "<leader>grb", ":Neogit rebase<CR>" },
-            { "<leader>gl",  ":Neogit log -g<CR>" },
-            { "<leader>gd",  ":Neogit diff<CR>" },
-        },
+        config = function()
+            vim.keymap.set("n", "<leader>k", ":Neogit<CR>")
+            vim.keymap.set("n", "<leader>gpl", ":Neogit pull<CR>")
+            vim.keymap.set("n", "<leader>gph", ":Neogit push<CR>")
+            vim.keymap.set("n", "<leader>grb", ":Neogit rebase<CR>")
+            vim.keymap.set("n", "<leader>gl", ":Neogit log -g<CR>")
+            vim.keymap.set("n", "<leader>gd", ":Neogit diff<CR>")
+        end
     },
     -- {
     --     "tpope/vim-fugitive",
