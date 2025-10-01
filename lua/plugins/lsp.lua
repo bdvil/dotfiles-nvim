@@ -128,13 +128,22 @@ return {
                 settings = {
                     pyright = {
                         disableOrganizeImports = true,
+                        disableTaggedHints = true,
                     },
                     python = {
                         analysis = {
                             stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
                         },
+                        typeCheckingMode = "off",
                     },
                 },
+            })
+            vim.lsp.config('ty', {
+                settings = {
+                    ty = {
+                        diagnosticMode = 'workspace',
+                    }
+                }
             })
             vim.lsp.config("ruff", {
                 on_attach = function(client, bufnr)
@@ -227,6 +236,7 @@ return {
                 },
                 ensure_installed = {
                     "pyright",
+                    "ty",
                     "ruff",
                     "lua_ls",
                 },
