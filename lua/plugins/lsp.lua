@@ -129,6 +129,7 @@ return {
                     pyright = {
                         disableOrganizeImports = true,
                         disableTaggedHints = true,
+                        diagnosticMode = 'workspace',
                     },
                     python = {
                         analysis = {
@@ -142,6 +143,10 @@ return {
                 settings = {
                     ty = {
                         diagnosticMode = 'workspace',
+                        inlayHints = {
+                            variableTypes = true,
+                            callArgumentNames = true,
+                        },
                     }
                 }
             })
