@@ -253,20 +253,16 @@ return {
                 float = {
                     source = true,
                 },
+                signs = {
+                    active = true,
+                    text = {
+                        [vim.diagnostic.severity.ERROR] = "✘",
+                        [vim.diagnostic.severity.WARN] = "▲",
+                        [vim.diagnostic.severity.HINT] = "⚑",
+                        [vim.diagnostic.severity.INFO] = "»",
+                    },
+                }
             })
-
-            local sign = function(hl, text)
-                vim.fn.sign_define(hl, {
-                    texthl = hl,
-                    text = text,
-                    numhl = "",
-                })
-            end
-
-            sign("DiagnosticSignError", "✘")
-            sign("DiagnosticSignWarn", "▲")
-            sign("DiagnosticSignHint", "⚑")
-            sign("DiagnosticSignInfo", "»")
         end,
     },
 }
