@@ -162,7 +162,7 @@ return {
                         diagnosticMode = 'workspace',
                         inlayHints = {
                             variableTypes = true,
-                            callArgumentNames = true,
+                            callArgumentNames = false,
                         },
                     }
                 }
