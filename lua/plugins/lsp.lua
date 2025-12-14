@@ -91,6 +91,22 @@ return {
                         })
                     end
 
+                    if client and client.server_capabilities.inlayHintProvider then
+                        -- vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#d8d8d8", bg = "#3a3a3a" })
+                        vim.api.nvim_create_autocmd("InsertEnter", {
+                            buffer = event.buf,
+                            callback = function()
+                                vim.lsp.inlay_hint.enable(false)
+                            end
+                        })
+                        vim.api.nvim_create_autocmd({ "InsertLeave", "LspNotify" }, {
+                            buffer = event.buf,
+                            callback = function()
+                                vim.lsp.inlay_hint.enable(true)
+                            end
+                        })
+                    end
+
                     if client and client.name == "ruff" then
                         vim.api.nvim_create_autocmd("BufWritePre", {
                             group = organizeimportgroup,
@@ -130,6 +146,7 @@ return {
                         disableOrganizeImports = true,
                         disableTaggedHints = true,
                         diagnosticMode = 'workspace',
+                        disableLanguageServices = true,
                     },
                     python = {
                         analysis = {
