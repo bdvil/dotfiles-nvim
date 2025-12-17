@@ -46,7 +46,6 @@ return {
             vim.keymap.set("n", "<C-e>", builtin.find_files, {})
             -- vim.keymap.set("n", "<leader>so", builtin.oldfiles, {})
             vim.keymap.set("n", "<leader>sg", builtin.live_grep, {})
-            vim.keymap.set("n", "<leader>sd", builtin.diagnostics, {})
             vim.keymap.set("n", "<leader>sk", builtin.keymaps, {})
             vim.keymap.set("n", "<leader>sq", builtin.quickfix, {})
             vim.keymap.set("n", "<leader>sh", builtin.help_tags, {})
