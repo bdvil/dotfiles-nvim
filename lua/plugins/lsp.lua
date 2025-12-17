@@ -140,22 +140,22 @@ return {
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-            vim.lsp.config("pyright", {
-                settings = {
-                    pyright = {
-                        disableOrganizeImports = true,
-                        disableTaggedHints = true,
-                        diagnosticMode = 'workspace',
-                        disableLanguageServices = true,
-                    },
-                    python = {
-                        analysis = {
-                            stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
-                        },
-                        typeCheckingMode = "off",
-                    },
-                },
-            })
+            -- vim.lsp.config("pyright", {
+            --     settings = {
+            --         pyright = {
+            --             disableOrganizeImports = true,
+            --             disableTaggedHints = true,
+            --             diagnosticMode = 'workspace',
+            --             disableLanguageServices = true,
+            --         },
+            --         python = {
+            --             analysis = {
+            --                 stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
+            --             },
+            --             typeCheckingMode = "off",
+            --         },
+            --     },
+            -- })
             vim.lsp.config('ty', {
                 settings = {
                     ty = {
@@ -170,7 +170,7 @@ return {
             vim.lsp.config("ruff", {
                 on_attach = function(client, bufnr)
                     if client.name == "ruff" then
-                        -- Disable hover in favor of Pyright
+                        -- Disable hover in favor of ty
                         client.server_capabilities.hoverProvider = false
                     end
                 end,
@@ -257,7 +257,6 @@ return {
                     end,
                 },
                 ensure_installed = {
-                    "pyright",
                     "ty",
                     "ruff",
                     "lua_ls",
