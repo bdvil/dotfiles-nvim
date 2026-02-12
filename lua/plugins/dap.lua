@@ -22,7 +22,6 @@ return {
         dap_python.setup(os.getenv("DEBUGPY_ENV"))
         dap_python.test_runner = "pytest"
 
-        require("dap.ext.vscode").load_launchjs()
         require("nvim-dap-virtual-text").setup({})
 
         dap.listeners.after.event_initialized["dapui_config"] = function()
